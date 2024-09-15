@@ -1,0 +1,46 @@
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs/
+*.log
+
+# Build directories
+dist/
+build/
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Environment variables
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.temp
+
+# Test coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Others
+*.lock
