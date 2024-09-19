@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "JetBrainsMonoNerdFont";
+  src: url("/fonts/JetBrainsMonoNerdFont-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrainsMonoNerdFont";
+  src: url("/fonts/JetBrainsMonoNerdFont-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Optional: Apply globally */
+body {
+  font-family: "JetBrainsMonoNerdFont", monospace;
+}
