@@ -1,45 +1,51 @@
-import { useState, useEffect, memo } from "react";
-
+import { useEffect, memo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { inputState } from "../store/atom/atom";
 
-import { WhoAmI } from "./WhoAmI";
 import Help from "./Help";
 import About from "./About";
 import Project from "./Project";
 import Social from "./Social";
+import Banner from "./Banner";
 
 const TerminalOutput = memo(() => {
   const inputData = useRecoilValue(inputState);
-
-  const [output, setOutput] = useState<string>("");
+  const [output, setOutput] = useState<string | JSX.Element[]>([
+    <Banner key="banner" />,
+  ]);
 
   useEffect(() => {
-    setOutput(inputData);
+    if (inputData) {
+      handleCommand(inputData);
+    }
   }, [inputData]);
 
-  type Command = "whoami" | "clear" | "about" | "projects" | "social" | "help";
+  const handleCommand = (command: string) => {
+    const trimmedCommand = command.toLowerCase();
 
-  const CommandMap: Record<Command, JSX.Element> = {
-    whoami: <WhoAmI />,
-    clear: <span>clear</span>,
-    about: <About />,
-    projects: <Project />,
-    social: <Social />,
-    help: <Help />,
-  };
-
-  const renderOutput = () => {
-    const commandKey = output.toLowerCase() as keyof typeof CommandMap;
-
-    if (commandKey in CommandMap) {
-      return CommandMap[commandKey];
-    } else {
-      return <span>{output}: command not found</span>;
+    switch (trimmedCommand) {
+      case "clear":
+        setOutput(""); // Clear the output
+        break;
+      case "about":
+        setOutput([<About />]);
+        break;
+      case "projects":
+        setOutput([<Project />]);
+        break;
+      case "social":
+        setOutput([<Social />]);
+        break;
+      case "help":
+        setOutput([<Help />]);
+        break;
+      default:
+        setOutput([<span>{command}: command not found</span>]);
+        break;
     }
   };
 
-  return <div className="text-foreground ml-4 mb-6">{renderOutput()}</div>;
+  return <div className="text-foreground ml-4 mb-6">{output}</div>;
 });
 
 export default TerminalOutput;
