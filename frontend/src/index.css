@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: "JetBrainsMonoNerdFont";
   src: url("/fonts/JetBrainsMonoNerdFont-Regular.ttf") format("truetype");

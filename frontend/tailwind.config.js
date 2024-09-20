@@ -12,7 +12,7 @@ export default {
         secondary: "#4c7899",
         alert: "#A54242",
         disabled: "#707880",
-        transparent: "#FF0000",
+        Transparent: "#FF0000",
         textColor: "#F0C674",
       },
       fontFamily: {
