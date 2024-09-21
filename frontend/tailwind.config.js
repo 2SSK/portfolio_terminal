@@ -15,10 +15,7 @@ export default {
         Transparent: "#FF0000",
         textColor: "#F0C674",
       },
-      fontFamily: {
-        jetbrains: ["JetBrainsMonoNerdFont", "monospace"],
-      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-textshadow")],
 };

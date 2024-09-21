@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { inputState, focusInputState } from "../store/atom/atom";
 
@@ -30,6 +30,9 @@ const TerminalInputBox = ({
   const setInputData = useSetRecoilState(inputState);
   const focusInput = useRecoilValue(focusInputState);
   const [inputValue, setInputValue] = useState("");
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [tempInput, setTempInput] = useState("");
+  const historyIndex = useRef(-1);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -40,13 +43,72 @@ const TerminalInputBox = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && inputValue.trim() !== "") {
-      setInputData(inputValue.trim());
-      setInputValue("");
+    switch (e.key) {
+      case "Enter":
+        if (inputValue.trim() !== "") {
+          setCommandHistory((prev) => [...prev, inputValue.trim()]);
+          setInputData(inputValue.trim());
+          setInputValue(""); 
+          historyIndex.current = -1;
+          setTempInput("");
 
-      if (typeof focusInput === "function") {
-        focusInput();
+          if (typeof focusInput === "function") {
+            focusInput();
+          }
+        }
+        break;
+
+      case "Tab": {
+        e.preventDefault();
+
+        const COMMANDS: string[] = [
+          "help",
+          "about",
+          "projects",
+          "whoami",
+          "repo",
+          "banner",
+          "clear",
+        ];
+        const currentInput = inputValue;
+
+        for (const ele of COMMANDS) {
+          if (ele.startsWith(currentInput)) {
+            setInputValue(ele);
+            return;
+          }
+        }
+        break;
       }
+
+      case "ArrowUp":
+        if (historyIndex.current === -1) {
+          setTempInput(inputValue);
+        }
+        if (historyIndex.current < commandHistory.length - 1) {
+          historyIndex.current++;
+          setInputValue(
+            commandHistory[commandHistory.length - 1 - historyIndex.current] ||
+              "",
+          );
+        }
+        break;
+
+      case "ArrowDown":
+        if (historyIndex.current > 0) {
+          historyIndex.current--;
+          setInputValue(
+            commandHistory[commandHistory.length - 1 - historyIndex.current] ||
+              "",
+          );
+        } else if (historyIndex.current === 0) {
+          setInputValue(tempInput);
+          historyIndex.current = -1;
+        }
+        break;
+
+      default:
+        break;
     }
   };
 

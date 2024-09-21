@@ -8,9 +8,12 @@ import Project from "./Project";
 import Social from "./Social";
 import Banner from "./Banner";
 import Resume from "./Resume";
+import WhoAmI from "./WhoAmI";
+
+const REPO_LINK = "https://github.com/2SSK/i3_theme_portfolio";
 
 const TerminalOutput = memo(() => {
-  const inputData = useRecoilValue(inputState); 
+  const inputData = useRecoilValue(inputState);
   const [output, setOutput] = useState<(string | JSX.Element)[]>([
     <Banner key="banner" />,
   ]);
@@ -19,10 +22,10 @@ const TerminalOutput = memo(() => {
     const trimmedCommand = command.toLowerCase();
 
     setOutput((prevOutput) => {
-      const newOutput = [...prevOutput]; 
+      const newOutput = [...prevOutput];
 
       newOutput.push(
-        <div key={newOutput.length} className="mb-1">
+        <div key={newOutput.length} className="mb-2">
           <span className="text-textColor font-bold">ssk@archBTW ~ </span>
           <span className="text-primary">&gt; {command}</span>
         </div>,
@@ -30,7 +33,10 @@ const TerminalOutput = memo(() => {
 
       switch (trimmedCommand) {
         case "clear":
-          return []; 
+          return [];
+        case "whoami":
+          newOutput.push(<WhoAmI key={newOutput.length + 1} />);
+          break;
         case "about":
           newOutput.push(<About key={newOutput.length + 1} />);
           break;
@@ -46,6 +52,15 @@ const TerminalOutput = memo(() => {
         case "resume":
           newOutput.push(<Resume key={newOutput.length + 1} />);
           break;
+        case "banner":
+          newOutput.push(<Banner key={newOutput.length + 1} />);
+          break;
+        case "repo":
+          newOutput.push("Redirecting to github.com...");
+          setTimeout(() => {
+            window.open(REPO_LINK, "_blank");
+          }, 500);
+          break;
         default:
           newOutput.push(
             <div key={newOutput.length + 1} className="text-red-500">
@@ -60,7 +75,7 @@ const TerminalOutput = memo(() => {
 
   useEffect(() => {
     if (inputData) {
-      handleCommand(inputData);
+      handleCommand(inputData); // Process the command
     }
   }, [inputData, handleCommand]);
 

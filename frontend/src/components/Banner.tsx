@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const repoLink = "https://github.com/2SSK/i3_theme_portfolio";
+
 const Banner: React.FC = () => {
   const [asciiArt, setAsciiArt] = useState<string>("");
 
@@ -23,7 +25,25 @@ const Banner: React.FC = () => {
   return (
     <div>
       <Welcome asciiArt={asciiArt} />
+      <BannerCommand command="help" /> for a list of all available commands
+      <br />
+      <BannerCommand command="repo" /> to view the GitHub repository or click{" "}
+      <a href={repoLink} target="_blank" className="underline text-customBlue">
+        here
+      </a>
     </div>
+  );
+};
+
+interface BannerCommandProps {
+  command: string;
+}
+
+const BannerCommand = ({ command }: BannerCommandProps) => {
+  return (
+    <span className="text-primary rounded-md bg-customBlue bg-opacity-15">
+      '{command}'
+    </span>
   );
 };
 
@@ -33,7 +53,7 @@ interface WelcomeProps {
 
 const Welcome: React.FC<WelcomeProps> = ({ asciiArt }) => {
   return (
-    <div className="text-textColor text-sm leading-none">
+    <div className="text-textColor text-sm leading-none mb-4">
       <pre style={{ fontFamily: "monospace", whiteSpace: "pre-wrap" }}>
         {asciiArt}
       </pre>
