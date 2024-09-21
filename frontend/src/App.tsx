@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 
 const Navbar = lazy(() => import("./components/Navbar"));
 const TerminalBox = lazy(() => import("./components/TerminalBox"));
@@ -14,14 +14,19 @@ export default function App() {
 }
 
 function MyApp() {
+  useEffect(() => {
+    const img = new Image();
+    img.src = wallpaper;
+  }, []);
+
   return (
     <div
-      className={`w-full h-screen bg-cover bg-center overflow-auto `}
+      className={`w-full h-screen bg-cover bg-center overflow-hidden bg-gray-900`}
       style={{ backgroundImage: `url(${wallpaper})` }}
     >
       <Navbar />
-      <div className="w-[full] h-[95%] mt-[20px] flex justify-center items-center p-[20px]">
-        <TerminalBox />;
+      <div className="w-full h-[95%] mt-[20px] flex justify-center items-center p-[20px]">
+        <TerminalBox />
       </div>
     </div>
   );
