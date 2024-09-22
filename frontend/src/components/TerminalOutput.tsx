@@ -7,7 +7,6 @@ import About from "./About";
 import Project from "./Project";
 import Social from "./Social";
 import Banner from "./Banner";
-import Resume from "./Resume";
 import WhoAmI from "./WhoAmI";
 import Experience from "./Experience";
 
@@ -20,7 +19,7 @@ const TerminalOutput = memo(() => {
   ]);
 
   const handleCommand = useCallback((command: string) => {
-    const trimmedCommand = command.toLowerCase();
+    const trimmedCommand = command.trim().toLowerCase();
 
     setOutput((prevOutput) => {
       const newOutput = [...prevOutput];
@@ -54,7 +53,15 @@ const TerminalOutput = memo(() => {
           newOutput.push(<Help key={newOutput.length + 1} />);
           break;
         case "resume":
-          newOutput.push(<Resume key={newOutput.length + 1} />);
+          const link = document.createElement("a");
+          link.href = "/resume.docx";
+          link.download = "ssk-resume.pdf";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          newOutput.push(
+            <div key={newOutput.length + 1}>Downloading your resume...</div>,
+          );
           break;
         case "banner":
           newOutput.push(<Banner key={newOutput.length + 1} />);
@@ -71,8 +78,12 @@ const TerminalOutput = memo(() => {
               <span className="text-red-500">{command}: command not found</span>
               <br />
               <p className="text-gray-300">
-                Try <span className="text-primary p-[1px] rounded-md bg-customBlue bg-opacity-10"> 'help'</span> for more
-                information.
+                Try{" "}
+                <span className="text-primary p-[1px] rounded-md bg-customBlue bg-opacity-10">
+                  {" "}
+                  'help'
+                </span>{" "}
+                for more information.
               </p>
             </div>,
           );

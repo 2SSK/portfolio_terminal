@@ -81,7 +81,7 @@ const TerminalInputBox = ({
             commandHistory[commandHistory.length - 1 - historyIndex.current],
           );
         } else if (historyIndex.current === 0) {
-          setInputValue(tempInput); 
+          setInputValue(tempInput);
           historyIndex.current = -1;
         }
         break;
@@ -92,7 +92,7 @@ const TerminalInputBox = ({
           "help",
           "about",
           "exerience",
-          "projects",
+          "project",
           "whoami",
           "repo",
           "resume",
@@ -100,7 +100,7 @@ const TerminalInputBox = ({
           "banner",
           "clear",
         ];
-        const currentInput = inputValue.toLowerCase(); 
+        const currentInput = inputValue.toLowerCase();
         const matches = COMMANDS.filter((cmd) => cmd.startsWith(currentInput));
 
         if (matches.length === 1) {
