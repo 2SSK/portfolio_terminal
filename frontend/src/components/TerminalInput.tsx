@@ -46,64 +46,16 @@ const TerminalInputBox = ({
     switch (e.key) {
       case "Enter":
         if (inputValue.trim() !== "") {
+          const uniqueId = Date.now(); 
           setCommandHistory((prev) => [...prev, inputValue.trim()]);
-          setInputData(inputValue.trim());
-          setInputValue(""); 
+          setInputData({ command: inputValue.trim(), id: uniqueId }); 
+          setInputValue("");
           historyIndex.current = -1;
           setTempInput("");
 
           if (typeof focusInput === "function") {
             focusInput();
           }
-        }
-        break;
-
-      case "Tab": {
-        e.preventDefault();
-
-        const COMMANDS: string[] = [
-          "help",
-          "about",
-          "projects",
-          "whoami",
-          "repo",
-          "banner",
-          "clear",
-        ];
-        const currentInput = inputValue;
-
-        for (const ele of COMMANDS) {
-          if (ele.startsWith(currentInput)) {
-            setInputValue(ele);
-            return;
-          }
-        }
-        break;
-      }
-
-      case "ArrowUp":
-        if (historyIndex.current === -1) {
-          setTempInput(inputValue);
-        }
-        if (historyIndex.current < commandHistory.length - 1) {
-          historyIndex.current++;
-          setInputValue(
-            commandHistory[commandHistory.length - 1 - historyIndex.current] ||
-              "",
-          );
-        }
-        break;
-
-      case "ArrowDown":
-        if (historyIndex.current > 0) {
-          historyIndex.current--;
-          setInputValue(
-            commandHistory[commandHistory.length - 1 - historyIndex.current] ||
-              "",
-          );
-        } else if (historyIndex.current === 0) {
-          setInputValue(tempInput);
-          historyIndex.current = -1;
         }
         break;
 

@@ -9,11 +9,12 @@ import Social from "./Social";
 import Banner from "./Banner";
 import Resume from "./Resume";
 import WhoAmI from "./WhoAmI";
+import Experience from "./Experience";
 
 const REPO_LINK = "https://github.com/2SSK/i3_theme_portfolio";
 
 const TerminalOutput = memo(() => {
-  const inputData = useRecoilValue(inputState);
+  const { command, id } = useRecoilValue(inputState);
   const [output, setOutput] = useState<(string | JSX.Element)[]>([
     <Banner key="banner" />,
   ]);
@@ -40,6 +41,9 @@ const TerminalOutput = memo(() => {
         case "about":
           newOutput.push(<About key={newOutput.length + 1} />);
           break;
+        case "experience":
+          newOutput.push(<Experience key={newOutput.length + 1} />);
+          break;
         case "project":
           newOutput.push(<Project key={newOutput.length + 1} />);
           break;
@@ -63,8 +67,13 @@ const TerminalOutput = memo(() => {
           break;
         default:
           newOutput.push(
-            <div key={newOutput.length + 1} className="text-red-500">
-              {command}: command not found
+            <div key={newOutput.length + 1}>
+              <span className="text-red-500">{command}: command not found</span>
+              <br />
+              <p className="text-gray-300">
+                Try <span className="text-primary p-[1px] rounded-md bg-customBlue bg-opacity-10"> 'help'</span> for more
+                information.
+              </p>
             </div>,
           );
           break;
@@ -74,10 +83,10 @@ const TerminalOutput = memo(() => {
   }, []);
 
   useEffect(() => {
-    if (inputData) {
-      handleCommand(inputData); // Process the command
+    if (command) {
+      handleCommand(command);
     }
-  }, [inputData, handleCommand]);
+  }, [command, id, handleCommand]);
 
   return (
     <div className="text-foreground ml-4 mb-6">

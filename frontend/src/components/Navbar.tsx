@@ -21,6 +21,7 @@ export default function Navbar() {
         <ul className="flex items-center gap-8 text-primary cursor-pointer">
           <ListLink text="about" />
           <ListLink text="project" />
+          {/* <ListLink text="experience" /> */}
           <ListLink text="social" />
           <ListLink text="resume" />
           <ListLink text="help" />
@@ -36,8 +37,10 @@ function ListLink({ text }: ListLinkProps) {
   const setInputState = useSetRecoilState(inputState);
 
   const handleOnClick = (e: React.MouseEvent<HTMLLIElement>) => {
-    setInputState(e.currentTarget.innerText);
+    const uniqueId = Date.now();
+    setInputState({ command: e.currentTarget.innerText, id: uniqueId });
   };
+
   return (
     <li onClick={handleOnClick} className="outline-none">
       {text}
