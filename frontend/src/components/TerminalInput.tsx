@@ -46,9 +46,9 @@ const TerminalInputBox = ({
     switch (e.key) {
       case "Enter":
         if (inputValue.trim() !== "") {
-          const uniqueId = Date.now(); 
+          const uniqueId = Date.now();
           setCommandHistory((prev) => [...prev, inputValue.trim()]);
-          setInputData({ command: inputValue.trim(), id: uniqueId }); 
+          setInputData({ command: inputValue.trim(), id: uniqueId });
           setInputValue("");
           historyIndex.current = -1;
           setTempInput("");
@@ -58,6 +58,65 @@ const TerminalInputBox = ({
           }
         }
         break;
+
+      case "ArrowUp":
+        if (
+          commandHistory.length > 0 &&
+          historyIndex.current < commandHistory.length - 1
+        ) {
+          if (historyIndex.current === -1) {
+            setTempInput(inputValue); // Save the current input
+          }
+          historyIndex.current += 1;
+          setInputValue(
+            commandHistory[commandHistory.length - 1 - historyIndex.current],
+          );
+        }
+        break;
+
+      case "ArrowDown":
+        if (historyIndex.current > 0) {
+          historyIndex.current -= 1;
+          setInputValue(
+            commandHistory[commandHistory.length - 1 - historyIndex.current],
+          );
+        } else if (historyIndex.current === 0) {
+          setInputValue(tempInput); 
+          historyIndex.current = -1;
+        }
+        break;
+
+      case "Tab": {
+        e.preventDefault();
+        const COMMANDS: string[] = [
+          "help",
+          "about",
+          "exerience",
+          "projects",
+          "whoami",
+          "repo",
+          "resume",
+          "social",
+          "banner",
+          "clear",
+        ];
+        const currentInput = inputValue.toLowerCase(); 
+        const matches = COMMANDS.filter((cmd) => cmd.startsWith(currentInput));
+
+        if (matches.length === 1) {
+          setInputValue(matches[0]);
+        } else if (matches.length > 1) {
+          console.log("Possible commands:", matches);
+
+          const commonPrefix = matches.reduce((prev, curr) => {
+            let i = 0;
+            while (i < prev.length && prev[i] === curr[i]) i++;
+            return prev.slice(0, i);
+          });
+          setInputValue(commonPrefix);
+        }
+        break;
+      }
 
       default:
         break;

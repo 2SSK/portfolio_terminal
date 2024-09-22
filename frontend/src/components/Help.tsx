@@ -12,7 +12,7 @@ const helpObj = {
 
 const Help = () => {
   return (
-    <div className="p-4">
+    <div className="p-4 text-gray-300">
       <div className="mb-4">
         {helpObj.commands.map((ele, index) => {
           const command = ele[0];
@@ -31,7 +31,6 @@ const Help = () => {
       </div>
       <div className="mt-4">
         <KeyHint keyName="Tab" description="for auto completion." />
-        <KeyHint keyName="Esc" description="to clear the input line." />
         <p>
           Press <span className="font-bold text-textColor">[↑][↓]</span> to
           scroll through your history of commands.
