@@ -2,17 +2,22 @@ import { useState, useEffect } from "react";
 import ASCII_PFP from "/images/ascii_pfp.jpg";
 
 const About = () => {
+  useEffect(() => {
+    const img = new Image();
+    img.src = ASCII_PFP;
+  }, []);
+
   return (
     <div>
-      <div className="w-[850px] py-2 px-8 bg-opacity-60 rounded-lg flex items-center gap-[100px] bg-[#1a1b26]">
+      <div className="w-[850px] px-4 py-4 md:px-8 bg-opacity-60 rounded-lg flex items-center gap-[50px] md:gap-[100px] bg-[#1a1b26]">
         <div>
           <img
             src={ASCII_PFP}
             alt="ASCII Profile"
-            className="w-[300px] brightness-200"
+            className="w-[200px] md:w-[300px] brightness-200"
           />
         </div>
-        <div className="whitespace-pre leading-relaxed flex flex-col gap-2">
+        <div className="whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-2">
           <InfoRow label="User" value="ssk" />
           <InfoRow label="Host" value="archBTW" />
           <InfoRow label="Uptime" value={<UptimeComponent />} />{" "}
@@ -20,16 +25,16 @@ const About = () => {
           <InfoRow label="Editor" value="Neovim" />
           <InfoRow label="OS" value="Arch Linux" />
           <InfoRow label="Hobby" value="Tinkering with Linux & Custom setups" />
-          <InfoRow label="Quote" value='"I use arch BTW"' />
+          <InfoRow label="Quote" value='"I use arch BTW 🐧"' />
         </div>
       </div>
 
       <div className="my-8">
         <span className="font-bold text-[#bb9af7] mb-4">LANGUAGES:</span>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Badge text="C" />
           <Badge text="C++" />
-          <Badge text="Bash script" />
+          <Badge text="Bash" />
           <Badge text="Python" />
           <Badge text="TypeScript" />
           <Badge text="JavaScript" />
@@ -39,7 +44,7 @@ const About = () => {
       </div>
       <div>
         <span className="font-bold text-[#bb9af7] mb-4">TOOLS:</span>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Badge text="Linux" />
           <Badge text="Neovim" />
           <Badge text="Vercel" />
@@ -56,7 +61,7 @@ const About = () => {
       </div>
       <div className="mt-8">
         <span className="font-bold text-[#bb9af7] mb-4">FRAMEWORKS:</span>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Badge text="React" />
           <Badge text="Next" />
           <Badge text="Node" />
@@ -113,8 +118,10 @@ const InfoRow = ({
   value: React.ReactNode;
 }) => {
   return (
-    <div className="flex items-center gap-[4px] text-md">
-      <span className="w-[100px] font-extrabold text-[#7aa2f7]">{label}:</span>
+    <div className="flex items-center flex-wrap gap-[2px] md:gap-[4px] text-sm md:text-md">
+      <span className="w-[55px] md:w-[100px] font-extrabold text-[#7aa2f7]">
+        {label}:
+      </span>
       <span className="text-[#c0caf5]">{value}</span>
     </div>
   );

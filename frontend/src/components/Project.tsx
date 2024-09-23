@@ -1,6 +1,6 @@
 export default function Project() {
   return (
-    <div className="gap-2">
+    <div className="gap-10 md:gap-2">
       <Link
         href="https://co-flow-sauravsinghkarmwars-projects.vercel.app/"
         title="Coflow"
@@ -40,7 +40,7 @@ function Link({
   description: string;
 }) {
   return (
-    <div className="flex items-center">
+    <div className="flex flex-col md:flex-row items-start">
       <a
         href={href}
         target="_blank"

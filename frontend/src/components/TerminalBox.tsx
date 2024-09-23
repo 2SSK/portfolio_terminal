@@ -22,9 +22,8 @@ export default function TerminalBox() {
   return (
     <div
       onClick={handleFocusInput}
-      className="w-[80%] h-[90%] p-7 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-30 backdrop-blur-md shadow-lg shadow-secondary overflow-auto"
+      className="w-[95%] md:w-[80%] h-[85%] md:h-[90%] mb-5 p-7 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-30 backdrop-blur-md shadow-lg shadow-secondary overflow-auto"
     >
-      {/* Hides the scrollbar in WebKit browsers */}
       <style>{`
         .terminal-box::-webkit-scrollbar {
           display: none;

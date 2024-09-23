@@ -23,7 +23,7 @@ const Banner: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="text-sm md:text-base">
       <Welcome asciiArt={asciiArt} />
       <BannerCommand command="help" /> for a list of all available commands
       <br />
@@ -53,7 +53,7 @@ interface WelcomeProps {
 
 const Welcome: React.FC<WelcomeProps> = ({ asciiArt }) => {
   return (
-    <div className="text-textColor text-sm leading-none mb-4">
+    <div className="text-textColor leading-none mb-4">
       <pre style={{ fontFamily: "monospace", whiteSpace: "pre-wrap" }}>
         {asciiArt}
       </pre>

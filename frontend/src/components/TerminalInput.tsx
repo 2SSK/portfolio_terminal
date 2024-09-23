@@ -8,7 +8,7 @@ export default function TerminalInput({
   inputRef: React.RefObject<HTMLInputElement>;
 }) {
   return (
-    <div className="w-full flex flex-col items-start justify-center text-lg">
+    <div className="w-full flex flex-col items-start justify-center text-md sm:text-lg">
       {" "}
       <p className="text-textColor font-bold mb-1">
         ssk<span className="text-foreground">@</span>
