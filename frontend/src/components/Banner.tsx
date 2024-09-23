@@ -53,7 +53,7 @@ interface WelcomeProps {
 
 const Welcome: React.FC<WelcomeProps> = ({ asciiArt }) => {
   return (
-    <div className="text-textColor leading-none mb-4">
+    <div className="text-textColor leading-none w-[500px] mb-4">
       <pre style={{ fontFamily: "monospace", whiteSpace: "pre-wrap" }}>
         {asciiArt}
       </pre>

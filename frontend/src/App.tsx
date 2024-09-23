@@ -25,7 +25,7 @@ function MyApp() {
       style={{ backgroundImage: `url(${wallpaper})` }}
     >
       <Navbar />
-      <div className="w-full h-[100%] mt-2  flex justify-center items-center p-[20px]">
+      <div className="w-full h-screen mt-2  flex justify-center items-center p-[20px]">
         <TerminalBox />
       </div>
     </div>

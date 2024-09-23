@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import ASCII_PFP from "/images/ascii_pfp.jpg";
+import PFP from "/images/anime-pfp.jpg";
 
 const About = () => {
   useEffect(() => {
     const img = new Image();
-    img.src = ASCII_PFP;
+    img.src = PFP;
   }, []);
 
   return (
@@ -12,9 +12,9 @@ const About = () => {
       <div className="w-[850px] px-4 py-4 md:px-8 bg-opacity-60 rounded-lg flex items-center gap-[50px] md:gap-[100px] bg-[#1a1b26]">
         <div>
           <img
-            src={ASCII_PFP}
+            src={PFP}
             alt="ASCII Profile"
-            className="w-[200px] md:w-[300px] brightness-200"
+            className="w-[200px] md:w-[300px] rounded-md"
           />
         </div>
         <div className="whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-2">
@@ -118,7 +118,7 @@ const InfoRow = ({
   value: React.ReactNode;
 }) => {
   return (
-    <div className="flex items-center flex-wrap gap-[2px] md:gap-[4px] text-sm md:text-md">
+    <div className="flex items-center gap-[2px] md:gap-[4px] text-md">
       <span className="w-[55px] md:w-[100px] font-extrabold text-[#7aa2f7]">
         {label}:
       </span>
