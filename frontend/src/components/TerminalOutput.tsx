@@ -54,7 +54,7 @@ const TerminalOutput = memo(() => {
           break;
         case "resume":
           const link = document.createElement("a");
-          link.href = "/resume.docx";
+          link.href = "/resume.pdf";
           link.download = "ssk-resume.pdf";
           document.body.appendChild(link);
           link.click();
