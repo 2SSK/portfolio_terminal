@@ -4,7 +4,7 @@ const helpObj = {
     ["'projects'", "Maybe there's something interesting."],
     ["'whoami'", "A perplexing question."],
     ["'repo'", "View the Github Repository."],
-    ["'repo'", "Download my resume."],
+    ["'resume'", "Download my resume."],
     ["'banner'", "Display the banner."],
     ["'clear'", "Clear the terminal."],
   ],
