@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { focusInputState } from "../store/atom/atom";
+import { focusInputState } from "../../store/atom/atom";
 
 const TerminalInput = lazy(() => import("./TerminalInput"));
 const TerminalOutput = lazy(() => import("./TerminalOutput"));
@@ -8,6 +8,7 @@ const TerminalOutput = lazy(() => import("./TerminalOutput"));
 export default function TerminalBox() {
   const inputRef = useRef<HTMLInputElement>(null);
   const setFocusInput = useSetRecoilState(focusInputState);
+  const outputRef = useRef<HTMLDivElement>(null); // Ref for auto-scrolling
 
   useEffect(() => {
     setFocusInput(() => () => {
@@ -22,15 +23,19 @@ export default function TerminalBox() {
   return (
     <div
       onClick={handleFocusInput}
-      className="w-[95%] md:w-[80%] h-[85%] md:h-[90%] mb-5 p-7 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-30 backdrop-blur-md shadow-lg shadow-secondary overflow-auto"
+      className="w-full h-[85%] mb-5 p-4 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-30 backdrop-blur-md shadow-lg shadow-secondary overflow-y-auto overflow-x-hidden"
+      ref={outputRef}
     >
       <style>{`
+        body {
+          overflow: hidden; /* Disable scrolling on the webpage */
+        }
         .terminal-box::-webkit-scrollbar {
-          display: none;
+          display: none; /* Hide scrollbars inside the terminal */
         }
       `}</style>
       <Suspense fallback={<div>Loading...</div>}>
-        <TerminalOutput />
+        <TerminalOutput outputRef={outputRef} />
         <TerminalInput inputRef={inputRef} />
       </Suspense>
     </div>

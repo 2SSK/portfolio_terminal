@@ -2,6 +2,8 @@ const emailId = "sauravchp2@gmail.com";
 const github = "2SSK";
 const linkedin = "2ssk";
 const twitter = "_2ssk";
+const leetcode = "2SSK";
+const gfg = "2ssk";
 
 const Social = () => {
   return (
@@ -13,11 +15,13 @@ const Social = () => {
           <i className="fa-brands fa-linkedin"></i>
           <i className="fa-brands fa-square-x-twitter"></i>
         </div>
-        <div className="text-gray-400">
+        <div className="text-gray-400 mr-2">
           <p>Email</p>
           <p>GitHub</p>
           <p>Linkedin</p>
           <p>Twitter</p>
+          <p>Leetcode</p>
+          <p>GFG</p>
         </div>
       </div>
       <div className="flex flex-col underline text-customBlue text-md">
@@ -32,6 +36,12 @@ const Social = () => {
         </a>
         <a target="_blank" href={`https://x.com/${twitter}`}>
           twitter/{twitter}
+        </a>
+        <a target="_blank" href={`https://leetcode.com/u/${leetcode}`}>
+          leetcode/{leetcode}
+        </a>
+        <a target="_blank" href={`https://www.geeksforgeeks.org/user/${gfg}`}>
+          GeeksForGeeks/{gfg}
         </a>
       </div>
     </div>

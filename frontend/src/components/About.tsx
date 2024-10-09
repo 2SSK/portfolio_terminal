@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PFP from "/images/anime-pfp.jpg";
+import PFP from "/images/ascii_pfp.jpg";
 
 const About = () => {
   useEffect(() => {
@@ -7,84 +7,103 @@ const About = () => {
     img.src = PFP;
   }, []);
 
+  const languages = [
+    "C",
+    "C++",
+    "Bash",
+    "Python",
+    "TypeScript",
+    "JavaScript",
+    "Lua",
+    "Markdown",
+  ];
+  const tools = [
+    "Linux",
+    "Neovim",
+    "Emacs",
+    "Vercel",
+    "Render",
+    "Netlify",
+    "Postman",
+    "Compass",
+    "GIMP",
+    "Canva",
+    "Trello",
+    "Notion",
+    "Obsidian",
+  ];
+  const frameworks = [
+    "React",
+    "Next",
+    "Node",
+    "Express",
+    "JWT",
+    "ReactNative",
+    "Vite",
+  ];
+  const databases = ["MariaDB", "MySQL", "mongoDB", "POSTGRES"];
+
   return (
     <div>
-      <div className="w-[850px] px-4 py-4 md:px-8 bg-opacity-60 rounded-lg flex items-center gap-[50px] md:gap-[100px] bg-[#1a1b26]">
-        <div>
-          <img
-            src={PFP}
-            alt="ASCII Profile"
-            className="w-[200px] md:w-[300px] rounded-md"
-          />
-        </div>
-        <div className="whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-2">
-          <InfoRow label="User" value="ssk" />
-          <InfoRow label="Host" value="archBTW" />
-          <InfoRow label="Uptime" value={<UptimeComponent />} />{" "}
-          <InfoRow label="Shell" value="zsh" />
-          <InfoRow label="Editor" value="Neovim" />
-          <InfoRow label="OS" value="Arch Linux" />
-          <InfoRow label="Hobby" value="Tinkering with Linux & Custom setups" />
-          <InfoRow label="Quote" value='"I use arch BTW 🐧"' />
-        </div>
-      </div>
+      <Neofetch />
 
-      <div className="my-8">
-        <span className="font-bold text-[#bb9af7] mb-4">LANGUAGES:</span>
-        <div className="flex gap-2 flex-wrap">
-          <Badge text="C" />
-          <Badge text="C++" />
-          <Badge text="Bash" />
-          <Badge text="Python" />
-          <Badge text="TypeScript" />
-          <Badge text="JavaScript" />
-          <Badge text="Lua" />
-          <Badge text="Markdown" />
-        </div>
-      </div>
-      <div>
-        <span className="font-bold text-[#bb9af7] mb-4">TOOLS:</span>
-        <div className="flex gap-2 flex-wrap">
-          <Badge text="Linux" />
-          <Badge text="Neovim" />
-          <Badge text="Vercel" />
-          <Badge text="Render" />
-          <Badge text="Netlify" />
-          <Badge text="Postman" />
-          <Badge text="Compass" />
-          <Badge text="GIMP" />
-          <Badge text="Canva" />
-          <Badge text="Trello" />
-          <Badge text="Notion" />
-          <Badge text="Obsidian" />
-        </div>
-      </div>
-      <div className="mt-8">
-        <span className="font-bold text-[#bb9af7] mb-4">FRAMEWORKS:</span>
-        <div className="flex gap-2 flex-wrap">
-          <Badge text="React" />
-          <Badge text="Next" />
-          <Badge text="Node" />
-          <Badge text="Express" />
-          <Badge text="JWT" />
-          <Badge text="ReactNative" />
-          <Badge text="Vite" />
-        </div>
-      </div>
-      <div className="mt-8">
-        <span className="font-bold text-[#bb9af7] mb-4">DATABASE:</span>
-        <div className="flex gap-2">
-          <Badge text="MariaDB" />
-          <Badge text="MySQL" />
-          <Badge text="mongoDB" />
-          <Badge text="POSTGRES" />
-        </div>
+      {/* Languages Section */}
+      <SkillsSection title="LANGUAGES" items={languages} />
+
+      {/* Tools Section */}
+      <SkillsSection title="TOOLS" items={tools} />
+
+      {/* Frameworks Section */}
+      <SkillsSection title="FRAMEWORKS" items={frameworks} />
+
+      {/* Databases Section */}
+      <SkillsSection title="DATABASE" items={databases} />
+    </div>
+  );
+};
+
+// SkillsSection component to avoid repetitive divs
+const SkillsSection = ({
+  title,
+  items,
+}: {
+  title: string;
+  items: string[];
+}) => {
+  return (
+    <div className="my-8">
+      <span className="font-bold text-[#bb9af7] mb-4">{title}:</span>
+      <div className="flex gap-2 flex-wrap">
+        {items.map((item, index) => (
+          <Badge key={index} text={item} />
+        ))}
       </div>
     </div>
   );
 };
 
-// Calculating age in years and days
+// Neofetch component
+function Neofetch() {
+  return (
+    <div className="w-[98%] sm:w-[850px] px-4 py-4 md:px-8 bg-opacity-60 rounded-lg flex flex-col sm:flex-row items-start sm:items-center gap-[50px] md:gap-[100px] bg-[#1a1b26]">
+      <div>
+        <img src={PFP} alt="ASCII Profile" className="w-[300px] rounded-md" />
+      </div>
+      <div className="whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-2">
+        <InfoRow label="User" value="ssk" />
+        <InfoRow label="Host" value="archBTW" />
+        <InfoRow label="Uptime" value={<UptimeComponent />} />{" "}
+        <InfoRow label="Shell" value="zsh" />
+        <InfoRow label="Editor" value="Neovim" />
+        <InfoRow label="OS" value="Arch Linux" />
+        <InfoRow label="Hobby" value="Tinkering with Linux" />
+        <InfoRow label="Quote" value='"I use arch BTW 🐧"' />
+      </div>
+    </div>
+  );
+}
+
+// UptimeComponent for calculating years and days
 function UptimeComponent() {
   const [uptime, setUptime] = useState("");
 
@@ -109,7 +128,7 @@ function UptimeComponent() {
   return <>{uptime}</>;
 }
 
-// Component to display label and value
+// InfoRow component to display label and value
 const InfoRow = ({
   label,
   value,
@@ -118,16 +137,14 @@ const InfoRow = ({
   value: React.ReactNode;
 }) => {
   return (
-    <div className="flex items-center gap-[2px] md:gap-[4px] text-md">
-      <span className="w-[55px] md:w-[100px] font-extrabold text-[#7aa2f7]">
-        {label}:
-      </span>
-      <span className="text-[#c0caf5]">{value}</span>
+    <div className="flex items-center">
+      <span className="w-16 sm:w-20 font-bold text-[#7aa2f7]">{label}:</span>
+      <span className="text-[#c0caf5] text-wrap">{value}</span>
     </div>
   );
 };
 
-// Component to display badge with random color
+// Badge component to display skills
 const Badge = ({ text }: { text: string }) => {
   return (
     <span

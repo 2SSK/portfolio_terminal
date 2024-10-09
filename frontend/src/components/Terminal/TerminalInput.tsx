@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { inputState, focusInputState } from "../store/atom/atom";
+import { inputState, focusInputState } from "../../store/atom/atom";
 
 export default function TerminalInput({
   inputRef,
@@ -9,10 +9,8 @@ export default function TerminalInput({
 }) {
   return (
     <div className="w-full flex flex-col items-start justify-center text-md sm:text-lg">
-      {" "}
       <p className="text-textColor font-bold mb-1">
-        ssk<span className="text-foreground">@</span>
-        archBTW ~
+        ssk<span className="text-foreground">@</span>archBTW ~
       </p>
       <div className="flex mb-6">
         <span className="text-primary text-lg font-bold mr-2">&gt;</span>
@@ -91,7 +89,7 @@ const TerminalInputBox = ({
         const COMMANDS: string[] = [
           "help",
           "about",
-          "exerience",
+          "experience",
           "project",
           "whoami",
           "repo",
@@ -106,8 +104,6 @@ const TerminalInputBox = ({
         if (matches.length === 1) {
           setInputValue(matches[0]);
         } else if (matches.length > 1) {
-          console.log("Possible commands:", matches);
-
           const commonPrefix = matches.reduce((prev, curr) => {
             let i = 0;
             while (i < prev.length && prev[i] === curr[i]) i++;
@@ -131,7 +127,7 @@ const TerminalInputBox = ({
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}
       autoFocus
-      className="border-none w-[800px] focus:outline-none text-gray-400 flex-1 bg-transparent"
+      className="border-none w-full max-w-[800px] focus:outline-none text-gray-400 flex-1 bg-transparent"
     />
   );
 };

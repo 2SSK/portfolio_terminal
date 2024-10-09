@@ -1,33 +1,15 @@
-import { lazy, useEffect } from "react";
-
-const Navbar = lazy(() => import("./components/Navbar"));
-const TerminalBox = lazy(() => import("./components/TerminalBox"));
-
+import Terminal from "./components/Terminal/Terminal";
 import wallpaper from "/images/wallpapers/wallpaper.jpg";
 
-export default function App() {
-  return (
-    <>
-      <MyApp />
-    </>
-  );
-}
-
-function MyApp() {
-  useEffect(() => {
-    const img = new Image();
-    img.src = wallpaper;
-  }, []);
-
+const App = () => {
   return (
     <div
-      className={`w-full h-screen bg-cover bg-center overflow-hidden bg-gray-900`}
+      className="w-full h-screen bg-cover bg-center flex items-start justify-center p-4"
       style={{ backgroundImage: `url(${wallpaper})` }}
     >
-      <Navbar />
-      <div className="w-full h-screen mt-2  flex justify-center items-center p-[20px]">
-        <TerminalBox />
-      </div>
+      <Terminal />
     </div>
   );
-}
+};
+
+export default App;

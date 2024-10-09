@@ -2,6 +2,11 @@ export default function Project() {
   return (
     <div className="gap-10 md:gap-2">
       <Link
+        href="https://github.com/2SSK/dot-files/"
+        title="i3wm Dotfiles"
+        description="A complete setup for i3wm with configurations for Alacritty, Kitty, Neovim, Emacs, Polybar, Rofi, and more."
+      />
+      <Link
         href="https://co-flow-sauravsinghkarmwars-projects.vercel.app/"
         title="Coflow"
         description="A collaborative platform empowering teams to ideate, plan, and innovate seamlessly on a virtual canvas."
