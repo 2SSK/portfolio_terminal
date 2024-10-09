@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PFP from "/images/ascii_pfp.jpg";
+import PFP from "/images/anime-pfp.jpg";
 
 const About = () => {
   useEffect(() => {
