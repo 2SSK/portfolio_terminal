@@ -3,10 +3,10 @@ import { useRecoilValue } from "recoil";
 import { inputState } from "../../store/atom/atom";
 
 import Help from "../Help";
-import About from "../About";
-import Project from "../Project";
+import About from "../About/About";
+import Project from "../Project/Project";
 import Social from "../Social";
-import Banner from "../Banner";
+import Banner from "../Banner/Banner";
 import WhoAmI from "../WhoAmI";
 import Experience from "../Experience";
 

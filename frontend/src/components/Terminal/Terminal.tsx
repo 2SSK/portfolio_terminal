@@ -23,7 +23,7 @@ export default function TerminalBox() {
   return (
     <div
       onClick={handleFocusInput}
-      className="w-full h-[85%] mb-5 p-4 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-30 backdrop-blur-md shadow-lg shadow-secondary overflow-y-auto overflow-x-hidden"
+      className="w-full h-[85%] sm:h-full mb-5 p-4 border-4 border-customBlue rounded-lg bg-transparent bg-opacity-50 backdrop-blur-lg shadow-lg shadow-secondary overflow-y-auto overflow-x-hidden"
       ref={outputRef}
     >
       <style>{`

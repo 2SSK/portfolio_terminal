@@ -1,3 +1,5 @@
+import Link from "./Link";
+
 export default function Project() {
   return (
     <div className="gap-10 md:gap-2">
@@ -31,29 +33,6 @@ export default function Project() {
         title="MERN Todo App"
         description="A simple todo app built with MERN stack"
       />
-    </div>
-  );
-}
-
-function Link({
-  href,
-  title,
-  description,
-}: {
-  href: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="flex flex-col md:flex-row items-start">
-      <a
-        href={href}
-        target="_blank"
-        className="underline text-[#bb9af7] w-[150px] text-md"
-      >
-        {title}
-      </a>
-      <p className="text-[#c0caf5] text-sm">{description}</p>
     </div>
   );
 }
