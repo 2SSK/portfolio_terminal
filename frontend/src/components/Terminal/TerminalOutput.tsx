@@ -1,4 +1,4 @@
-import { useEffect, memo, useState, useCallback } from "react";
+import React, { useEffect, memo, useState, useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { inputState } from "../../store/atom/atom";
 
@@ -55,8 +55,8 @@ const TerminalOutput = memo(
             break;
           case "resume": {
             const link = document.createElement("a");
-            link.href = "/resume.pdf";
-            link.download = "ssk-resume.pdf";
+            link.href = "/resume.docx";
+            link.download = "ssk-resume.docx";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
