@@ -12,6 +12,7 @@
 *.out
 
 # Project local
+.env
 *.env
 .env.*
 
