@@ -1,0 +1,43 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go command
+*.out
+
+# Project local
+*.env
+.env.*
+
+# Logs
+*.log
+
+# Dependency directories (usually managed by go mod)
+vendor/
+
+# Build directories
+bin/
+build/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Go module files
+go.sum
