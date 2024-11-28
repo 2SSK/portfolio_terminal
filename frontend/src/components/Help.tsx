@@ -1,7 +1,7 @@
 const helpObj = {
   commands: [
     ["about", "About me."],
-    ["projects", "View my projects."],
+    ["project", "View my projects."],
     ["whoami", "A brief introduction."],
     ["repo", "View the GitHub repository."],
     ["resume", "Download my resume."],

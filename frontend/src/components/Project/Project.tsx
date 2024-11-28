@@ -28,11 +28,6 @@ export default function Project() {
         title="i3wm Dotfiles"
         description="A complete setup for i3wm with configurations for Alacritty, Kitty, Neovim, Emacs, Polybar, Rofi, and more."
       />
-      <Link
-        href="https://github.com/2SSK/go-todo-cli-app"
-        title="Go Todo CLI"
-        description="A simple CLI app to manage todos built with Go"
-      />
     </div>
   );
 }
