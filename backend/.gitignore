@@ -1,0 +1,46 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+
+# Build output
+/build/
+*.out
+
+# Dependency directories
+vendor/
+
+# Go-specific files
+*.log
+*.test
+*.mod
+*.sum
+
+# IDE/Editor-specific files
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and debug files
+*.log
+*.trace
+
+# Temporary files
+tmp/
+*.tmp
+*.swp
+
+# Docker-related files
+docker-compose.override.yml
+.env
+
+# Node.js-related files (if applicable, like using Fiber with frontend frameworks)
+node_modules/
+package-lock.json
+yarn.lock
