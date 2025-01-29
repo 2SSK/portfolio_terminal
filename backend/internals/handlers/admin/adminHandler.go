@@ -26,14 +26,14 @@ func VerifyAdmin(c *fiber.Ctx) error {
 	}
 
 	// Prisma client
-	prisma := db.NewClient()
-	if err := prisma.Connect(); err != nil {
+	client := db.NewClient()
+	if err := client.Connect(); err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Could not connect to the database"})
 	}
-	defer prisma.Disconnect()
+	defer client.Disconnect()
 
 	// Query the  database
-	admin, err := prisma.Admin.FindUnique(db.Admin.Username.Equals(body.Username)).Exec(context.Background())
+	admin, err := client.Admin.FindUnique(db.Admin.Username.Equals(body.Username)).Exec(context.Background())
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
 	}

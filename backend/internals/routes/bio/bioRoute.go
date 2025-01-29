@@ -9,4 +9,5 @@ func SetupBioRoutes(router fiber.Router) {
 	bio := router.Group("/bio")
 
 	bio.Get("/", bioHandler.GetBio)
+	bio.Post("/", bioHandler.SetBio)
 }

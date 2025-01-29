@@ -16,9 +16,11 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	// Create a new Fiber app
 	app := fiber.New()
 	PORT := os.Getenv("PORT")
 
+	// Setup the routes
 	router.SetupRoutes(app)
 
 	app.Listen(":" + PORT)

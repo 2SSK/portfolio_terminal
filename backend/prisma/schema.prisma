@@ -12,3 +12,11 @@ model Admin {
   username String @unique
   password String
 }
+
+model Bio {
+  id          Int    @id @default(autoincrement())
+  dp          String
+  name        String
+  intro       String
+  description String
+}
