@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	db "github.com/2SSK/portfolio_terminal/backend/prisma/db"
 	"golang.org/x/crypto/bcrypt"
@@ -22,8 +23,8 @@ func main() {
 	ctx := context.Background()
 
 	// Hardcoded admin credentials
-	username := "ssk"
-	password := "ssk@150603"
+	username := os.Getenv("ADMIN_USERNAME")
+	password := os.Getenv("ADMIN_PASSWORD")
 
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
