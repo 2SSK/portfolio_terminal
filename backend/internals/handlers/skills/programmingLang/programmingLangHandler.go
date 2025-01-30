@@ -61,10 +61,10 @@ func GetProgrammingLang(c *fiber.Ctx) error {
 	// Query the Database
 	programmingLangs, err := client.ProgrammingLang.FindMany().Exec(c.Context())
 	if err != nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Error while fetching the programming languages"})
+		return c.Status(500).JSON(fiber.Map{"error": "Error while fetching the programming languages"})
 	}
 	if programmingLangs == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "Programming Languages not found"})
+		return c.Status(204).JSON(fiber.Map{"error": "Programming Languages not found"})
 	}
 
 	// If everything is fine, return the programming languages
