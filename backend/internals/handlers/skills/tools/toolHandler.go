@@ -20,7 +20,7 @@ func GetTools(c *fiber.Ctx) error {
 	defer client.Disconnect()
 
 	// Query all the tools from the database
-	tools, err := client.Tools.FindMany().Exec(c.Context())
+	tools, err := client.Tool.FindMany().Exec(c.Context())
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Could not fetch the tools"})
 	}
@@ -52,16 +52,16 @@ func SetTools(c *fiber.Ctx) error {
 	defer client.Disconnect()
 
 	// Check if the tool already exists
-	existingTool, _ := client.Tools.FindUnique(
-		db.Tools.ToolName.Equals(input),
+	existingTool, _ := client.Tool.FindUnique(
+		db.Tool.ToolName.Equals(input),
 	).Exec(c.Context())
 	if existingTool != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Tool already exists"})
 	}
 
 	// Create the tool
-	_, err := client.Tools.CreateOne(
-		db.Tools.ToolName.Set(input),
+	_, err := client.Tool.CreateOne(
+		db.Tool.ToolName.Set(input),
 	).Exec(c.Context())
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Error while creating the tool"})
@@ -84,8 +84,8 @@ func DeleteTools(c *fiber.Ctx) error {
 	defer client.Disconnect()
 
 	// Delete the tool
-	_, err := client.Tools.FindUnique(
-		db.Tools.ToolName.Equals(input),
+	_, err := client.Tool.FindUnique(
+		db.Tool.ToolName.Equals(input),
 	).Delete().Exec(c.Context())
 
 	if err != nil {

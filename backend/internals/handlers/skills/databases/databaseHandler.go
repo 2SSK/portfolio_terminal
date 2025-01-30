@@ -9,6 +9,7 @@ import (
 
 type dbStruct struct {
 	DatabaseName string `json:"databaseName"`
+	SkillId      int    `json:"skillId"`
 }
 
 func GetDb(c *fiber.Ctx) error {
@@ -20,7 +21,7 @@ func GetDb(c *fiber.Ctx) error {
 	defer client.Disconnect()
 
 	// Query all the tools from the database
-	database, err := client.Databases.FindMany().Exec(c.Context())
+	database, err := client.Database.FindMany().Exec(c.Context())
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Could not fetch the database"})
 	}
@@ -41,9 +42,6 @@ func SetDb(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid Input"})
 	}
 
-	// Convert the tool name to lowercase
-	input := strings.ToLower(body.DatabaseName)
-
 	// Prisma client
 	client := db.NewClient()
 	if err := client.Connect(); err != nil {
@@ -51,17 +49,20 @@ func SetDb(c *fiber.Ctx) error {
 	}
 	defer client.Disconnect()
 
-	// Check if the tool already exists
-	existingDb, _ := client.Databases.FindUnique(
-		db.Databases.DatabaseName.Equals(input),
+	// Check if the database already exists
+	existingDb, _ := client.Database.FindUnique(
+		db.Database.DatabaseName.Equals(strings.ToLower(body.DatabaseName)),
 	).Exec(c.Context())
 	if existingDb != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "DB already exists"})
 	}
 
-	// Create the tool
-	_, err := client.Databases.CreateOne(
-		db.Databases.DatabaseName.Set(input),
+	// Create the database
+	_, err := client.Database.CreateOne(
+		db.Database.DatabaseName.Set(strings.ToLower(body.DatabaseName)),
+		// db.Database.Skill.Link(
+		// 	db.Skill.ID.Equals(body.SkillId),
+		// ),
 	).Exec(c.Context())
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Error while creating the DB"})
@@ -84,8 +85,8 @@ func DeleteDb(c *fiber.Ctx) error {
 	defer client.Disconnect()
 
 	// Delete the tool
-	_, err := client.Databases.FindUnique(
-		db.Databases.DatabaseName.Equals(input),
+	_, err := client.Database.FindUnique(
+		db.Database.DatabaseName.Equals(input),
 	).Delete().Exec(c.Context())
 
 	if err != nil {

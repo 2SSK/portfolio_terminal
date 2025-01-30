@@ -21,30 +21,14 @@ model Bio {
   description String
 }
 
-model Skills {
-  id               Int               @id @default(autoincrement())
-  programmingLangs ProgrammingLang[] @relation("SkillToProgrammingLang")
-  tools            Tools[]           @relation("SkillToTools")
-  databases        Databases[]       @relation("SkillToDatabases")
-}
-
 model ProgrammingLang {
-  id           Int     @id @default(autoincrement())
-  languageName String  @unique
-  skills       Skills? @relation("SkillToProgrammingLang", fields: [skillId], references: [id])
-  skillId      Int?
+  languageName String @unique
 }
 
-model Tools {
-  id       Int     @id @default(autoincrement())
-  toolName String  @unique
-  skills   Skills? @relation("SkillToTools", fields: [skillId], references: [id])
-  skillId  Int?
+model Tool {
+  toolName String @unique
 }
 
-model Databases {
-  id           Int     @id @default(autoincrement())
-  databaseName String  @unique
-  skills       Skills? @relation("SkillToDatabases", fields: [skillId], references: [id])
-  skillId      Int?
+model Database {
+  databaseName String @unique
 }

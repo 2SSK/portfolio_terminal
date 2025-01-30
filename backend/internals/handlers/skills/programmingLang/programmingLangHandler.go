@@ -18,9 +18,6 @@ func SetProgrammingLang(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid Input"})
 	}
 
-	// Convert the language to lowercase
-	input := strings.ToLower(body.Language)
-
 	// Prisma client
 	client := db.NewClient()
 	if err := client.Connect(); err != nil {
@@ -30,7 +27,7 @@ func SetProgrammingLang(c *fiber.Ctx) error {
 
 	// Check if the programming language already exists
 	existingLang, _ := client.ProgrammingLang.FindUnique(
-		db.ProgrammingLang.LanguageName.Equals(input),
+		db.ProgrammingLang.LanguageName.Equals(strings.ToLower(body.Language)),
 	).Exec(c.Context())
 
 	// If the programming language already exists, return an error message
@@ -40,10 +37,10 @@ func SetProgrammingLang(c *fiber.Ctx) error {
 
 	// Create the programming language
 	_, err := client.ProgrammingLang.CreateOne(
-		db.ProgrammingLang.LanguageName.Set(input),
+		db.ProgrammingLang.LanguageName.Set(strings.ToLower(body.Language)),
 	).Exec(c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Error while creating the programming language"})
+		return c.Status(500).JSON(fiber.Map{"error": "Error while creating the programming language", "err": err.Error()})
 	}
 
 	// if everything is fine, return a success message
