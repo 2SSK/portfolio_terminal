@@ -32,3 +32,49 @@ model Tool {
 model Database {
   databaseName String @unique
 }
+
+model Socials {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+  url   String
+}
+
+model Contacts {
+  id           Int    @id @default(autoincrement())
+  contactType  String @unique
+  contactValue String
+}
+
+model Resume {
+  id         Int    @id @default(autoincrement())
+  resumeFile String
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  image       String
+  title       String   @unique
+  description String
+  repoUrl     String
+  SkillsUsed  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  status      Status   @default(WIP)
+}
+
+model Experience {
+  id               Int      @id @default(autoincrement())
+  title            String
+  company          String   @unique
+  responsibilities String
+  from             DateTime
+  to               DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum Status {
+  WIP
+  PRODUCTION
+  ARCHIVED
+}
