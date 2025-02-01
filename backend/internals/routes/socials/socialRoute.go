@@ -11,5 +11,5 @@ func SetupSocailRoute(router fiber.Router) {
 	social.Get("/", socialHandler.GetSocial)
 	social.Get("/:title", socialHandler.GetSpecificSocial)
 	social.Post("/", socialHandler.SetSocial)
-	social.Put("/", socialHandler.UpdateSocail)
+	social.Delete("/:title", socialHandler.DeleteSocial)
 }

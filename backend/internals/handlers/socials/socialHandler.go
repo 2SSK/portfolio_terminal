@@ -89,13 +89,8 @@ func SetSocial(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"message": "Successfully created a socail link", "data": body})
 }
 
-func UpdateSocail(c *fiber.Ctx) error {
-	var body Social
-
-	// Parse the request body
-	if err := c.BodyParser(&body); err != nil {
-		return c.Status(400).JSON(fiber.Map{"message": "Invalid input"})
-	}
+func DeleteSocial(c *fiber.Ctx) error {
+	title := c.Params("title")
 
 	// Prisma client
 	client := db.NewClient()
@@ -104,16 +99,17 @@ func UpdateSocail(c *fiber.Ctx) error {
 	}
 	defer client.Disconnect()
 
-	// Update the social
-	_, err := client.Socials.FindUnique(
-		db.Socials.Title.Equals(strings.ToLower(body.Title)),
-	).Update(
-		db.Socials.URL.Set(body.Url),
-	).Exec(c.Context())
+	// Delete the specific social
+	social, err := client.Socials.FindUnique(
+		db.Socials.Title.Equals(strings.ToLower(title)),
+	).Delete().Exec(c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Error updating the social"})
+		return c.Status(500).JSON(fiber.Map{"message": "Error deleting the social"})
 	}
 
-	// If everything is fine, return the response
-	return c.Status(200).JSON(fiber.Map{"message": "Successfully updated the social"})
+	if social == nil {
+		return c.Status(404).JSON(fiber.Map{"message": "No social found"})
+	}
+
+	return c.Status(200).JSON(fiber.Map{"message": "Successfully deleted the social"})
 }
