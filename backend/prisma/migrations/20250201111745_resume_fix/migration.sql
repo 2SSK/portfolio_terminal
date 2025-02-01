@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Resume" ALTER COLUMN "id" SET DEFAULT 1,
+ALTER COLUMN "id" DROP DEFAULT;
+DROP SEQUENCE "Resume_id_seq";
