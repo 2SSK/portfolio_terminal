@@ -67,8 +67,8 @@ model Experience {
   title            String
   company          String   @unique
   responsibilities String
-  from             DateTime
-  to               DateTime
+  from             String
+  to               String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
