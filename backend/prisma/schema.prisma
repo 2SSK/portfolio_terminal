@@ -56,10 +56,10 @@ model Project {
   title       String   @unique
   description String
   repoUrl     String
-  SkillsUsed  String[]
+  liveUrl     String
+  SkillsUsed  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  status      Status   @default(WIP)
 }
 
 model Experience {
@@ -71,10 +71,4 @@ model Experience {
   to               DateTime
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-}
-
-enum Status {
-  WIP
-  PRODUCTION
-  ARCHIVED
 }
