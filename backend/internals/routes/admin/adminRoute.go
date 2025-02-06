@@ -8,5 +8,5 @@ import (
 func SetupAdminRoutes(router fiber.Router) {
 	admin := router.Group("/admin")
 
-	admin.Get("/", adminHandler.VerifyAdmin)
+	admin.Post("/", adminHandler.VerifyAdmin)
 }
