@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const Authentication = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
@@ -15,6 +17,7 @@ const Authentication = () => {
         password,
       });
       alert(response.data.message);
+      router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data?.message || "Login failed");
