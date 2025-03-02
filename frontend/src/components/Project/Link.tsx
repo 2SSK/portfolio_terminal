@@ -17,13 +17,13 @@ const Link = ({ href, github, title, description, image }: LinkProps) => {
         <img
           src={image}
           alt={title}
-          className="rounded-md md:h-[130px] h-[180px] w-full md:w-[200px] object-cover"
+          className="rounded-md md:h-[130px] h-[180px] w-full md:w-[200px] md:hover:scale-150 md:duration-300 md:transition-all md:ease-in-out object-cover"
         />
       )}
       <div className="flex flex-col justify-start">
         <div className="flex justify-between items-center text-lg font-semibold text-gray-100">
-          <p>{title}</p>
-          <div className="flex gap-3 text-gray-400">
+          <p className="text-primary">{title}</p>
+          <div className="flex gap-3 text-customBlue">
             <a href={href} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faExternalLinkAlt} />
             </a>
@@ -32,7 +32,7 @@ const Link = ({ href, github, title, description, image }: LinkProps) => {
             </a>
           </div>
         </div>
-        <p className="text-gray-400 text-sm mt-2">{description}</p>
+        <p className="text-gray-100 text-sm mt-2">{description}</p>
       </div>
     </div>
   );

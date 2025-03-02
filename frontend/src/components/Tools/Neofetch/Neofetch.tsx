@@ -7,7 +7,7 @@ interface NeofetchProps {
 
 const Neofetch: React.FC<NeofetchProps> = ({ PFP }) => {
   return (
-    <div className="w-[90%] sm:w-[50%]  px-4 py-4  bg-opacity-60 rounded-lg flex flex-col md:flex-row justify-center md:items-start gap-10 md:gap-[80px] bg-[#1a1b26]">
+    <div className="lg:max-w-2xl w-[50%]  px-4 py-4  bg-opacity-60 rounded-lg flex flex-col md:flex-row justify-center md:items-start gap-10 md:gap-[80px] bg-[#1a1b26]">
       <div>
         <img
           src={PFP}
@@ -15,9 +15,9 @@ const Neofetch: React.FC<NeofetchProps> = ({ PFP }) => {
           className="w-full md:w-[80%] md:h-full rounded-md"
         />
       </div>
-      <div className="w-full whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-2">
-        <InfoRow label="User" value="ssk" />
-        <InfoRow label="Host" value="archBTW" />
+      <div className="w-full whitespace-pre leading-relaxed flex flex-col gap-1 md:gap-1">
+        <InfoRow label="User" value="SSK" />
+        <InfoRow label="Host" value="ArchBTW" />
         <InfoRow label="Uptime" value={<UptimeComponent />} />
         <InfoRow label="Shell" value="zsh" />
         <InfoRow label="Editor" value="Neovim" />

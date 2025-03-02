@@ -1,13 +1,14 @@
 const helpObj = {
   commands: [
-    ["about", "About me."],
-    ["project", "View my projects."],
     ["whoami", "A brief introduction."],
+    ["tools", "tools and technologies I use."],
+    ["project", "View my projects."],
     ["repo", "View the GitHub repository."],
     ["resume", "Download my resume."],
     ["banner", "Display the banner."],
     ["social", "View my social profiles."],
     ["clear", "Clear the terminal."],
+    ["experience", "my work experiences"],
   ],
 };
 
@@ -20,7 +21,7 @@ const Help = () => {
           const description = ele[1];
           return (
             <div key={index} className="flex gap-4">
-              <span className=" w-20 text-center text-primary font-sans font-bold mb-[6px] p-1 rounded-md bg-customBlue bg-opacity-10">
+              <span className="border-none w-24 text-center text-primary font-sans font-bold mb-[6px] p-1 rounded-md bg-customBlue bg-opacity-10">
                 {command}
               </span>
               <span className="text-lg">{description}</span>

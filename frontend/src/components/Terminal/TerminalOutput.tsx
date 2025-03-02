@@ -3,7 +3,7 @@ import { useRecoilValue } from "recoil";
 import { inputState } from "../../store/atom/atom";
 
 import Help from "../Help";
-import About from "../About/About";
+import Tools from "../Tools/Tools";
 import Project from "../Project/Project";
 import Social from "../Social";
 import Banner from "../Banner/Banner";
@@ -38,8 +38,8 @@ const TerminalOutput = memo(
           case "whoami":
             newOutput.push(<WhoAmI key={newOutput.length + 1} />);
             break;
-          case "about":
-            newOutput.push(<About key={newOutput.length + 1} />);
+          case "tools":
+            newOutput.push(<Tools key={newOutput.length + 1} />);
             break;
           case "experience":
             newOutput.push(<Experience key={newOutput.length + 1} />);
@@ -83,9 +83,9 @@ const TerminalOutput = memo(
                 <br />
                 <p className="text-gray-300">
                   Try{" "}
-                  <span className="text-primary p-[1px] rounded-md bg-customBlue bg-opacity-10">
+                  <span className="w-20 text-center text-primary rounded-md bg-customBlue bg-opacity-15 py-0.5 px-2 mx-1">
                     {" "}
-                    'help'
+                    help
                   </span>{" "}
                   for more information.
                 </p>

@@ -4,7 +4,7 @@ import PFP from "/images/anime-pfp.jpg";
 import Neofetch from "./Neofetch/Neofetch";
 import SkillSection from "./SkillSection/SkillSection";
 
-const About = () => {
+const Tools = () => {
   useEffect(() => {
     const img = new Image();
     img.src = PFP;
@@ -54,4 +54,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Tools;
