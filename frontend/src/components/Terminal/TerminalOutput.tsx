@@ -10,7 +10,7 @@ import Banner from "../Banner/Banner";
 import { WhoAmI } from "../WhoAmI";
 import Experience from "../Experience";
 
-const REPO_LINK = "https://github.com/2SSK/i3_theme_portfolio";
+const REPO_LINK = "https://github.com/2SSK/portfolio_terminal.git";
 
 const TerminalOutput = memo(
   ({ outputRef }: { outputRef: React.RefObject<HTMLDivElement> }) => {
