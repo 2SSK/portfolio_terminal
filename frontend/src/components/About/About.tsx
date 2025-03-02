@@ -13,38 +13,27 @@ const About = () => {
   const languages = [
     "C",
     "C++",
-    "Bash",
+    "Golang",
     "Python",
+    "Bash Script",
     "TypeScript",
     "JavaScript",
-    "Lua",
     "Markdown",
   ];
   const tools = [
     "Linux",
     "Neovim",
-    "Emacs",
+    "Tmux",
     "Vercel",
     "Render",
     "Netlify",
     "Postman",
     "Compass",
-    "GIMP",
-    "Canva",
-    "Trello",
-    "Notion",
+    "Figma",
     "Obsidian",
   ];
-  const frameworks = [
-    "React",
-    "Next",
-    "Node",
-    "Express",
-    "JWT",
-    "ReactNative",
-    "Vite",
-  ];
-  const databases = ["MariaDB", "MySQL", "mongoDB", "POSTGRES"];
+  const frameworks = ["Reactjs", "Nextjs", "Expressjs", "GoFiber"];
+  const databases = ["MySQL", "mongoDB", "POSTGRESQL"];
 
   return (
     <div>

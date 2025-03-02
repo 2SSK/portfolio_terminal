@@ -19,13 +19,11 @@ const Help = () => {
           const command = ele[0];
           const description = ele[1];
           return (
-            <div key={index} className="flex">
-              <span className="w-28 text-primary font-bold mb-[6px]">
-                <span className="p-1 rounded-md bg-customBlue bg-opacity-10">
-                  {command}
-                </span>
+            <div key={index} className="flex gap-4">
+              <span className=" w-20 text-center text-primary font-sans font-bold mb-[6px] p-1 rounded-md bg-customBlue bg-opacity-10">
+                {command}
               </span>
-              <span className="">{description}</span>
+              <span className="text-lg">{description}</span>
             </div>
           );
         })}

@@ -7,7 +7,7 @@ import About from "../About/About";
 import Project from "../Project/Project";
 import Social from "../Social";
 import Banner from "../Banner/Banner";
-import WhoAmI from "../WhoAmI";
+import { WhoAmI } from "../WhoAmI";
 import Experience from "../Experience";
 
 const REPO_LINK = "https://github.com/2SSK/i3_theme_portfolio";
