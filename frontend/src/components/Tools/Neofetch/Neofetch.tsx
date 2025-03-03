@@ -7,7 +7,7 @@ interface NeofetchProps {
 
 const Neofetch: React.FC<NeofetchProps> = ({ PFP }) => {
   return (
-    <div className="lg:max-w-2xl w-[50%]  px-4 py-4  bg-opacity-60 rounded-lg flex flex-col md:flex-row justify-center md:items-start gap-10 md:gap-[80px] bg-[#1a1b26]">
+    <div className="w-full max-w-2xl  px-4 py-4  bg-opacity-60 rounded-lg flex flex-col md:flex-row justify-center md:items-start gap-10 md:gap-[80px] bg-[#1a1b26]">
       <div>
         <img
           src={PFP}

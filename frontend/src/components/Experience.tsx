@@ -1,6 +1,7 @@
 const workExperience = [
   {
     company: "EOXS",
+    companyLink: "https://www.eoxs.com",
     position: "Software Developer Intern",
     startDate: "03/03/2025",
     endDate: "Ongoing",
@@ -11,20 +12,26 @@ const workExperience = [
 
 const Experience = () => {
   return (
-    <div className="mt-4 ml-4">
+    <div className="mt-4 md:ml-4">
       {workExperience.map((job, index) => (
         <div
           key={index}
           className="max-w-lg border border-customBlue rounded-lg p-4 mb-4"
         >
-          <div className="text-xl font-semibold">
+          <div className="text-base md:text-xl font-semibold">
             <span className="text-primary">{job.position}</span> @{" "}
-            <span className="text-customBlue font-bold">{job.company}</span>
+            <a href={job.companyLink} target="_blank">
+              <span className="text-customBlue font-bold underline">
+                {job.company}
+              </span>
+            </a>
           </div>
           <div className="text-textColor text-sm mt-1">
             <span>{job.startDate}</span> - <span>{job.endDate}</span>
           </div>
-          <p className="mt-2 text-base text-gray-300 ">{job.description}</p>
+          <p className="mt-2 text-sm md:text-base text-gray-300 ">
+            {job.description}
+          </p>
         </div>
       ))}
     </div>

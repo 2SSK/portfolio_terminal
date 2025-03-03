@@ -16,16 +16,16 @@ const Social = () => {
   return (
     <div className="mt-4 ml-8 flex flex-col ">
       <div>
-        <span className="text-lg text-customBlue font-semibold">
+        <span className="text-base md:text-lg text-customBlue font-semibold">
           Reach out to me.
         </span>
-        <p className="text-base text-gray-400">
+        <p className="text-sm md:text-base text-gray-400">
           Feel free to reach out to me via email for any queries,
           <br />
           collaboration opportunities, or further details.
         </p>
       </div>
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         <SocialBox link={twitter} icon={faTwitter} title="Twitter" />
         <SocialBox link={`mailto:${emailId}`} icon={faEnvelope} title="Email" />
         <SocialBox link={linkedin} icon={faLinkedinIn} title="Linkedin" />
@@ -45,7 +45,7 @@ const SocialBox = ({
   icon: IconProp;
 }) => {
   return (
-    <div className="border border-customBlue rounded-md px-2 py-1 text-primary">
+    <div className="border border-customBlue rounded-md px-2 py-1 text-primary hover:bg-customBlue/10">
       <a target="_blank" href={link} rel="noopener noreferrer">
         <span>
           <FontAwesomeIcon icon={icon} className="mr-3" />

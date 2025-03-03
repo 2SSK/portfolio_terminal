@@ -14,17 +14,19 @@ const helpObj = {
 
 const Help = () => {
   return (
-    <div className="p-4 text-gray-300">
-      <div className="mb-4">
+    <div className="p-1 md:p-4 text-gray-300">
+      <div className="mb-1 md:mb-4">
         {helpObj.commands.map((ele, index) => {
           const command = ele[0];
           const description = ele[1];
           return (
-            <div key={index} className="flex gap-4">
-              <span className="border-none w-24 text-center text-primary font-sans font-bold mb-[6px] p-1 rounded-md bg-customBlue bg-opacity-10">
+            <div key={index} className="flex gap-2 md:gap-4 items-center">
+              <span className="border-none min-w-[80px] px-2 text-sm md:text-base text-center text-primary font-sans font-bold mb-[6px] p-0.5 md:p-1 rounded-md bg-customBlue bg-opacity-10">
                 {command}
               </span>
-              <span className="text-lg">{description}</span>
+              <span className="text-sm md:text-lg text-center">
+                {description}
+              </span>
             </div>
           );
         })}

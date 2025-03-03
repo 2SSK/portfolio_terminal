@@ -21,7 +21,7 @@ const Link = ({ href, github, title, description, image }: LinkProps) => {
         />
       )}
       <div className="flex flex-col justify-start">
-        <div className="flex justify-between items-center text-lg font-semibold text-gray-100">
+        <div className="flex justify-between items-center md:text-lg font-semibold text-gray-100">
           <p className="text-primary">{title}</p>
           <div className="flex gap-3 text-customBlue">
             <a href={href} target="_blank" rel="noopener noreferrer">

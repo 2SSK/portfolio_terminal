@@ -8,7 +8,7 @@ import containerPreview from "/images/projects/container_preview.png";
 
 export default function Project() {
   return (
-    <div className="mt-4 ml-10 flex flex-col gap-4">
+    <div className="mt-4 md:ml-10 flex flex-col gap-4">
       <Link
         image={coflowPreview}
         github="https://github.com/2SSK/CoFlow.git"

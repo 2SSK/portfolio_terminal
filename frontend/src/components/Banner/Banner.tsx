@@ -1,26 +1,16 @@
 import Welcome from "./Welcome";
 import BannerCommand from "./BannerCommand";
 
-const repoLink = "https://github.com/2SSK/portfolio_terminal";
-
 const Banner: React.FC = () => {
   return (
-    <div className="text-sm sm:text-md">
+    <div className="text-sm md:text-md mb-2">
       <Welcome />
       <div className="flex flex-col gap-2">
         <div>
           <BannerCommand command="help" /> for a list of all available commands
         </div>
-        <div>
-          <BannerCommand command="repo" /> to view the GitHub repository or
-          click{" "}
-          <a
-            href={repoLink}
-            target="_blank"
-            className="underline text-customBlue"
-          >
-            here
-          </a>
+        <div className="text-wrap">
+          <BannerCommand command="repo" /> to visit repository{" "}
         </div>
       </div>
     </div>
