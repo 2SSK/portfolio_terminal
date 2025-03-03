@@ -46,10 +46,7 @@ export const WhoAmI = () => {
               />
             </a>
             <a target="_blank" href="https://leetcode.com/u/2SSK/">
-              <SiLeetcode
-                size={24}
-                className="border border-primary/70 rounded-md p-1 md:p-2"
-              />
+              <SiLeetcode className="border border-primary/70 rounded-md p-1 md:p-2 size-7 md:size-9" />
             </a>
           </div>
         </div>
