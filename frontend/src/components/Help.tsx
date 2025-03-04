@@ -21,7 +21,7 @@ const Help = () => {
           const description = ele[1];
           return (
             <div key={index} className="flex gap-2 md:gap-4 items-center">
-              <span className="border-none min-w-[80px] px-2 text-sm md:text-base text-center text-primary font-sans font-bold mb-[6px] p-0.5 md:p-1 rounded-md bg-customBlue bg-opacity-10">
+              <span className="border-none min-w-[90px] px-2 text-sm md:text-base text-center text-primary font-sans font-bold mb-[6px] p-0.5 md:p-1 rounded-md bg-customBlue bg-opacity-10">
                 {command}
               </span>
               <span className="text-sm md:text-lg text-center">
