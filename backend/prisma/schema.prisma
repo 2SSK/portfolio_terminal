@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  projects    Projects[]
+  experiences Experience[]
+  tools       Tools[]
+  links       Links[]
+  resume      Resume        @relation(fields: [resumeFile], references: [file])
+  resumeFile  String
+}
+
+model Links {
+  title  String @unique
+  url    String
+  userId Int?
+  User   User?  @relation(fields: [userId], references: [id])
+}
+
+model Resume {
+  file String @unique
+  User User[]
+}
+
+model Tools {
+  id               Int              @id @default(autoincrement())
+  programmingLang  ProgrammingLang[] @relation("ProgrammingLangTools")
+  User             User?            @relation(fields: [userId], references: [id])
+  userId          Int?
+}
+
+model ProgrammingLang {
+  id    Int    @id @default(autoincrement())
+  lang  String @unique
+  tools Tools[] @relation("ProgrammingLangTools")
+}
+
+model SoftwareTools {
+  tools String @unique
+}
+
+model Frameworks {
+  frameworks String @unique
+}
+
+model Databases {
+  db String @unique
+}
+
+model Projects {
+  title       String @unique
+  preview     String
+  url         String
+  github      String
+  description String
+  userId      Int?
+  User        User?  @relation(fields: [userId], references: [id])
+}
+
+model Experience {
+  company     String   @unique
+  companyUrl  String
+  position    String
+  startDate   DateTime
+  endDate     DateTime
+  description String
+  userId      Int?
+  User        User?    @relation(fields: [userId], references: [id])
+}
