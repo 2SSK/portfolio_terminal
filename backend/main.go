@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/2SSK/portfolio_terminal/backend/config"
 	"github.com/2SSK/portfolio_terminal/backend/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -16,6 +17,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	// Initialize database connection
+	config.InitDB()
+	defer config.CloseDB()
 
 	// Create a new Fiber server
 	server := fiber.New()

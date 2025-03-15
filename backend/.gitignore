@@ -1,3 +1,58 @@
-node_modules
-# Keep environment variables out of version control
+# Go specific
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Environment variables
 .env
+.env.*
+!.env.example
+
+# Prisma
+generated/
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Dependency directories
+vendor/
+
+# Debug files
+debug/
+
+# Binary files
+bin/
+dist/
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Database files
+*.db
+*.sqlite
+
+# Coverage reports
+coverage.txt
+coverage.html
+
+# Air live reload
+tmp/
+.air.toml
+
+# Local development specific files
+notes.txt
+TODO.md

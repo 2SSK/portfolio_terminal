@@ -5,6 +5,9 @@ go 1.24.1
 require (
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/joho/godotenv v1.5.1
+	github.com/shopspring/decimal v1.4.0
+	github.com/steebchen/prisma-client-go v0.47.0
+	golang.org/x/crypto v0.36.0
 )
 
 require (
@@ -18,5 +21,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	go.mongodb.org/mongo-driver/v2 v2.0.1 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 )
