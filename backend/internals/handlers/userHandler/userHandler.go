@@ -36,3 +36,26 @@ func CreateUser(c *fiber.Ctx) error {
 
 	return c.Status(201).JSON(user)
 }
+
+func GetUser(c *fiber.Ctx) error {
+	var body input
+
+	if err := c.BodyParser(&body); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid inputs"})
+	}
+
+	user, err := config.PrismaClient.User.FindUnique(
+		db.User.Email.Equals(body.Email),
+	).Exec(c.Context())
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"error": "User not found"})
+	}
+
+	// Compare the password
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid password"})
+	}
+
+	return c.Status(200).JSON(user)
+}
