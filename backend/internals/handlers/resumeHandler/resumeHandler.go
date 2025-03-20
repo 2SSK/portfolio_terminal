@@ -7,21 +7,13 @@ import (
 
 	"github.com/2SSK/portfolio_terminal/backend/config"
 	"github.com/2SSK/portfolio_terminal/backend/prisma/db"
-	fileHandler "github.com/2SSK/portfolio_terminal/backend/utils"
+	"github.com/2SSK/portfolio_terminal/backend/utils/fileHandler"
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetResume(c *fiber.Ctx) error {
 	userId := c.QueryInt("userId")
 	disposition := c.Query("disposition", "inline") // default to inline viewing
-
-	// Verify user exists
-	existingUser, err := config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(userId),
-	).Exec(c.Context())
-	if err != nil || existingUser == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
-	}
 
 	// Get resume record
 	resume, err := config.PrismaClient.Resume.FindUnique(
@@ -49,14 +41,6 @@ func GetResume(c *fiber.Ctx) error {
 
 func AddResume(c *fiber.Ctx) error {
 	userId := c.QueryInt("userId")
-
-	// Verify user exists
-	existingUser, err := config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(userId),
-	).Exec(c.Context())
-	if err != nil || existingUser == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
-	}
 
 	// Get and validate file
 	file, err := c.FormFile("resume")

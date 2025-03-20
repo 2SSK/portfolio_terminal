@@ -22,7 +22,7 @@ model Links {
   id     Int    @id @default(autoincrement())
   title  String @unique
   url    String
-  userId Int
+  userId Int    @unique
   User   User?  @relation(fields: [userId], references: [id])
 }
 
@@ -35,7 +35,7 @@ model Resume {
 model Tools {
   id              Int               @id @default(autoincrement())
   user            User?             @relation(fields: [userId], references: [id])
-  userId          Int
+  userId          Int               @unique
   programmingLang ProgrammingLang[] @relation("ProgrammingLangTools")
   softwareTools   SoftwareTools[]   @relation("ToolsSoftware")
   frameworks      Frameworks[]      @relation("ToolsFramework")
@@ -73,7 +73,7 @@ model Projects {
   url         String
   github      String
   description String
-  userId      Int
+  userId      Int    @unique
   user        User?  @relation(fields: [userId], references: [id])
 }
 
@@ -85,6 +85,6 @@ model Experience {
   startDate   String
   endDate     String
   description String
-  userId      Int
+  userId      Int    @unique
   user        User?  @relation(fields: [userId], references: [id])
 }

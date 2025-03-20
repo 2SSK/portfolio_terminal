@@ -45,6 +45,15 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": "Failed to create user"})
 	}
 
+	// Create an initial tool instance for the user
+	_, err = config.PrismaClient.Tools.CreateOne(
+		db.Tools.User.Link(db.User.ID.Equals(user.ID)),
+	).Exec(c.Context())
+	if err != nil {
+		config.PrismaClient.User.FindUnique(db.User.ID.Equals(user.ID)).Delete().Exec(c.Context())
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to create user's tools"})
+	}
+
 	// Generate JWT token
 	token, err := generateToken(user.ID)
 	if err != nil {

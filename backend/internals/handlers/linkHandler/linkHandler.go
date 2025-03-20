@@ -19,14 +19,6 @@ func GetAllLinks(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "UserId is required"})
 	}
 
-	// Verify user exists
-	user, err := config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(userId),
-	).Exec(c.Context())
-	if err != nil || user == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
-	}
-
 	links, err := config.PrismaClient.Links.FindMany(
 		db.Links.UserID.Equals(userId),
 	).Exec(c.Context())
@@ -40,9 +32,6 @@ func GetAllLinks(c *fiber.Ctx) error {
 // GetLink gets a specific link and verifies it belongs to the user
 func GetLink(c *fiber.Ctx) error {
 	userId := c.QueryInt("userId")
-	if userId == 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId is required"})
-	}
 
 	linkId, err := c.ParamsInt("id")
 	if err != nil {
@@ -66,14 +55,6 @@ func CreateLink(c *fiber.Ctx) error {
 
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
-	}
-
-	// Verify user exists
-	user, err := config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(body.UserId),
-	).Exec(c.Context())
-	if err != nil || user == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
 	}
 
 	// Check if title already exists for this user
@@ -151,9 +132,6 @@ func UpdateLink(c *fiber.Ctx) error {
 // DeleteLink deletes a specific link if it belongs to the user
 func DeleteLink(c *fiber.Ctx) error {
 	userId := c.QueryInt("userId")
-	if userId == 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId is required"})
-	}
 
 	linkId, err := c.ParamsInt("id")
 	if err != nil {

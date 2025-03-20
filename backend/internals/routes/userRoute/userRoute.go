@@ -10,4 +10,5 @@ func SetupUserRoute(router fiber.Router) {
 
 	user.Post("/", userHandler.CreateUser)
 	user.Get("/", userHandler.GetUser)
+	user.Delete("/", userHandler.DeleteUser)
 }
