@@ -73,7 +73,7 @@ model Projects {
   url         String
   github      String
   description String
-  userId      Int    @unique
+  userId      Int    
   user        User?  @relation(fields: [userId], references: [id])
 }
 
@@ -85,6 +85,6 @@ model Experience {
   startDate   String
   endDate     String
   description String
-  userId      Int    @unique
+  userId      Int    
   user        User?  @relation(fields: [userId], references: [id])
 }

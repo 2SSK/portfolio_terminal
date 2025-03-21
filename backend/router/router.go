@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/linkRoute"
+	"github.com/2SSK/portfolio_terminal/backend/internals/routes/projectRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/resumeRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/toolsRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/userRoute"
@@ -16,4 +17,5 @@ func SetupRoutes(server *fiber.App) {
 	linkRoute.SetupLinkRoute(api)
 	resumeRoute.SetupResumeRoute(api)
 	toolsRoute.SetupToolsRoute(api)
+	projectRoute.SetupProjectRoute(api)
 }
