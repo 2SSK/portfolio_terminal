@@ -13,8 +13,7 @@ import (
 
 func main() {
 	//	 Load the environment variables
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
@@ -24,7 +23,6 @@ func main() {
 
 	// Create a new Fiber server
 	server := fiber.New()
-	PORT := os.Getenv("PORT")
 
 	// Enable CORS for all origins
 	server.Use(cors.New(cors.Config{
@@ -37,5 +35,9 @@ func main() {
 	router.SetupRoutes(server)
 
 	// Start the server
+	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "3000"
+	}
 	server.Listen(":" + PORT)
 }

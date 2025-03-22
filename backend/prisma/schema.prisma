@@ -20,13 +20,14 @@ model User {
 }
 
 model Bio {
-  id          Int    @id @default(autoincrement())
-  image       String
-  name        String @unique
-  title       String
-  description String
-  userId      Int    @unique
-  user        User   @relation(fields: [userId], references: [id])
+  id            Int     @id @default(autoincrement())
+  image         String
+  imagePublicId String?
+  name          String  @unique
+  title         String
+  description   String
+  userId        Int     @unique
+  user          User    @relation(fields: [userId], references: [id])
 }
 
 model Links {
@@ -38,9 +39,10 @@ model Links {
 }
 
 model Resume {
-  file   String @unique
-  userId Int    @unique
-  User   User   @relation(fields: [userId], references: [id])
+  file         String  @unique
+  filePublicId String?
+  userId       Int     @unique
+  User         User    @relation(fields: [userId], references: [id])
 }
 
 model Tools {
@@ -78,14 +80,15 @@ model Databases {
 }
 
 model Projects {
-  id          Int    @id @default(autoincrement())
-  title       String @unique
-  preview     String
-  url         String
-  github      String
-  description String
-  userId      Int
-  user        User?  @relation(fields: [userId], references: [id])
+  id              Int     @id @default(autoincrement())
+  title           String  @unique
+  preview         String
+  previewPublicId String?
+  url             String
+  github          String
+  description     String
+  userId          Int
+  user            User?   @relation(fields: [userId], references: [id])
 }
 
 model Experience {

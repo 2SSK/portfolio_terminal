@@ -1,36 +1,47 @@
 package fileHandler
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"mime/multipart"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
+	"github.com/joho/godotenv"
 )
 
 const (
-	MaxFileSize = 5 * 1024 * 1024
+	MaxFileSize = 5 * 1024 * 1024 // 5MB
 )
 
 var (
-	UploadDir    map[string]string
 	AllowedTypes map[string]map[string]bool
+	cld          *cloudinary.Cloudinary
 )
 
 func init() {
-	cwd, err := os.Getwd()
+	// Load environment variables
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Failed to get working directory:", err)
+		log.Println("No .env file found, relying on system environment variables")
 	}
 
-	// Initialize upload directories map
-	UploadDir = map[string]string{
-		"resume":  filepath.Join(cwd, "upload", "resume"),
-		"project": filepath.Join(cwd, "upload", "project"),
+	// Initialize Cloudinary client
+	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+	if cloudinaryURL == "" {
+		log.Fatal("CLOUDINARY_URL not set in environment variables")
 	}
 
-	// Initialize allowed types for different file categories
+	cld, err = cloudinary.NewFromURL(cloudinaryURL)
+	if err != nil {
+		log.Fatal("Failed to initialize Cloudinary:", err)
+	}
+
+	// Define allowed file types
 	AllowedTypes = map[string]map[string]bool{
 		"resume": {
 			".pdf":  true,
@@ -48,38 +59,52 @@ func init() {
 			".png":  true,
 		},
 	}
-
-	// Create all upload directories
-	for _, dir := range UploadDir {
-		if err := os.MkdirAll(dir, 0755); err != nil {
-			log.Fatal("Failed to create upload directory:", err)
-		}
-	}
 }
 
-// ValidateFile check file size and type based on category
+// ValidateFile checks file size and type
 func ValidateFile(file *multipart.FileHeader, category string) error {
 	if file.Size > MaxFileSize {
-		return fmt.Errorf("file size too large. Maximum size is 5MB")
+		return fmt.Errorf("file size exceeds 5MB limit")
 	}
 
 	ext := strings.ToLower(filepath.Ext(file.Filename))
-	if !AllowedTypes[category][ext] {
-		return fmt.Errorf("invalid file type for %s", category)
+	if allowed, ok := AllowedTypes[category][ext]; !ok || !allowed {
+		return fmt.Errorf("invalid file type '%s' for category '%s'", ext, category)
 	}
 	return nil
 }
 
-// DeleteFile removes a file from the specified category
-func DeleteFile(filename string, category string) error {
-	filePath := filepath.Join(UploadDir[category], filename)
-	if err := os.Remove(filePath); err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("Failed to delete file: %v", err)
+// UploadFile uploads a file to Cloudinary and returns the secure URL and public ID
+func UploadFile(file *multipart.FileHeader, category string, userID int) (string, string, error) {
+	f, err := file.Open()
+	if err != nil {
+		return "", "", fmt.Errorf("failed to open file: %v", err)
 	}
-	return nil
+	defer f.Close()
+
+	// Create a unique public ID
+	publicID := fmt.Sprintf("%d_%s", userID, strings.TrimSuffix(file.Filename, filepath.Ext(file.Filename)))
+
+	ctx := context.Background()
+	resp, err := cld.Upload.Upload(ctx, f, uploader.UploadParams{
+		PublicID: publicID,
+		Folder:   fmt.Sprintf("portfolio/%s", category),
+	})
+	if err != nil {
+		return "", "", fmt.Errorf("failed to upload to Cloudinary: %v", err)
+	}
+
+	return resp.SecureURL, publicID, nil
 }
 
-// GetFilePath returns the full path for a file
-func GetFilePath(filename string, category string) string {
-	return filepath.Join(UploadDir[category], filename)
+// DeleteFile deletes a file from Cloudinary by public ID
+func DeleteFile(publicID string) error {
+	ctx := context.Background()
+	_, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{
+		PublicID: publicID,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to delete file from Cloudinary: %v", err)
+	}
+	return nil
 }
