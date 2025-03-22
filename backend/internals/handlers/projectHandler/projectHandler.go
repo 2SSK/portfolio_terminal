@@ -16,7 +16,6 @@ type ProjectRequest struct {
 	Url         string `json:"url"`
 	Github      string `json:"github"`
 	Description string `json:"description"`
-	UserId      int    `json:"userId"`
 }
 
 func AddProject(c *fiber.Ctx) error {
@@ -171,7 +170,6 @@ func UpdateProject(c *fiber.Ctx) error {
 		Url:         existing.URL,
 		Github:      existing.Github,
 		Description: existing.Description,
-		UserId:      userId,
 	}
 
 	// Update fields if provided in the form

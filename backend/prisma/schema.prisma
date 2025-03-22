@@ -16,6 +16,17 @@ model User {
   tools       Tools[]
   links       Links[]
   resume      Resume?
+  bio         Bio?
+}
+
+model Bio {
+  id          Int    @id @default(autoincrement())
+  image       String
+  name        String @unique
+  title       String
+  description String
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id])
 }
 
 model Links {
@@ -23,7 +34,7 @@ model Links {
   title  String @unique
   url    String
   userId Int    @unique
-  User   User?  @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id])
 }
 
 model Resume {
@@ -73,7 +84,7 @@ model Projects {
   url         String
   github      String
   description String
-  userId      Int    
+  userId      Int
   user        User?  @relation(fields: [userId], references: [id])
 }
 
@@ -85,6 +96,6 @@ model Experience {
   startDate   String
   endDate     String
   description String
-  userId      Int    
+  userId      Int
   user        User?  @relation(fields: [userId], references: [id])
 }

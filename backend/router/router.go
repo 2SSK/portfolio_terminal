@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/2SSK/portfolio_terminal/backend/internals/routes/bioRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/experienceRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/linkRoute"
 	"github.com/2SSK/portfolio_terminal/backend/internals/routes/projectRoute"
@@ -15,6 +16,7 @@ func SetupRoutes(server *fiber.App) {
 	api := server.Group("/api", logger.New())
 
 	userRoute.SetupUserRoute(api)
+	bioRoute.SetupBioRoute(api)
 	linkRoute.SetupLinkRoute(api)
 	resumeRoute.SetupResumeRoute(api)
 	toolsRoute.SetupToolsRoute(api)

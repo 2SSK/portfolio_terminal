@@ -42,6 +42,11 @@ func init() {
 			".jpeg": true,
 			".png":  true,
 		},
+		"bio": {
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+		},
 	}
 
 	// Create all upload directories
