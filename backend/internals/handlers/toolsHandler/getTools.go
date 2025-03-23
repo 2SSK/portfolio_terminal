@@ -7,7 +7,8 @@ import (
 )
 
 func GetAllTools(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	tools, err := config.PrismaClient.Tools.FindUnique(
 		db.Tools.UserID.Equals(userId),
@@ -32,7 +33,8 @@ func GetAllTools(c *fiber.Ctx) error {
 }
 
 func GetAllProgrammingLangs(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	tools, err := config.PrismaClient.Tools.FindMany(
 		db.Tools.UserID.Equals(userId),
@@ -60,7 +62,8 @@ func GetAllProgrammingLangs(c *fiber.Ctx) error {
 }
 
 func GetAllSoftwareTools(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	tools, err := config.PrismaClient.Tools.FindMany(
 		db.Tools.UserID.Equals(userId),
@@ -88,7 +91,8 @@ func GetAllSoftwareTools(c *fiber.Ctx) error {
 }
 
 func GetAllFrameworks(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	tools, err := config.PrismaClient.Tools.FindMany(
 		db.Tools.UserID.Equals(userId),
@@ -116,7 +120,8 @@ func GetAllFrameworks(c *fiber.Ctx) error {
 }
 
 func GetAllDatabases(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	tools, err := config.PrismaClient.Tools.FindMany(
 		db.Tools.UserID.Equals(userId),

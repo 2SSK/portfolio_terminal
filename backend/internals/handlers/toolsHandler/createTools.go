@@ -18,7 +18,8 @@ func AddProgrammingLang(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	inputTool := strings.ToLower(body.Name)
 
@@ -58,7 +59,8 @@ func AddSoftwareTools(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	inputTool := strings.ToLower(body.Name)
 
@@ -85,7 +87,7 @@ func AddSoftwareTools(c *fiber.Ctx) error {
 	}
 
 	return c.Status(201).JSON(fiber.Map{
-		"lang": map[string]any{
+		"software": map[string]any{
 			"id":   newTool.ID,
 			"name": newTool.Name,
 		},
@@ -98,7 +100,8 @@ func AddFramework(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	inputTool := strings.ToLower(body.Name)
 
@@ -138,7 +141,8 @@ func AddDatabase(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 	}
 
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	inputTool := strings.ToLower(body.Name)
 

@@ -2,14 +2,11 @@ package toolsRoute
 
 import (
 	"github.com/2SSK/portfolio_terminal/backend/internals/handlers/toolsHandler"
-	"github.com/2SSK/portfolio_terminal/backend/utils/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupToolsRoute(router fiber.Router) {
 	tools := router.Group("/tools")
-
-	tools.Use(middleware.VerifyUser())
 
 	tools.Get("/", toolsHandler.GetAllTools)
 	tools.Get("/programming-lang", toolsHandler.GetAllProgrammingLangs)

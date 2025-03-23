@@ -1,6 +1,7 @@
 package userHandler
 
 import (
+	"context"
 	"os"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// input is the expected request body structure
 type input struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -18,9 +20,10 @@ type input struct {
 
 // UserResponse is what we send back to the client
 type UserResponse struct {
-	ID    int    `json:"id"`
-	Email string `json:"email"`
-	Token string `json:"token"`
+	ID           int    `json:"id"`
+	Email        string `json:"email"`
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
 }
 
 func CreateUser(c *fiber.Ctx) error {
@@ -28,6 +31,12 @@ func CreateUser(c *fiber.Ctx) error {
 
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
+	}
+
+	if existing, _ := config.PrismaClient.User.FindUnique(
+		db.User.Email.Equals(body.Email),
+	).Exec(c.Context()); existing != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "User already exists"})
 	}
 
 	// Hash the password
@@ -54,22 +63,27 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"error": "Failed to create user's tools"})
 	}
 
-	// Generate JWT token
-	token, err := generateToken(user.ID)
+	// Generate JWT tokens
+	accessToken, err := generateAccessToken(user.ID, c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate token"})
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate access token"})
+	}
+
+	refreshToken, err := generateRefreshToken(user.ID, c.Context())
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate refresh token"})
 	}
 
 	return c.Status(201).JSON(UserResponse{
-		ID:    user.ID,
-		Email: user.Email,
-		Token: token,
+		ID:           user.ID,
+		Email:        user.Email,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 }
 
 func GetUser(c *fiber.Ctx) error {
 	var body input
-
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid inputs"})
 	}
@@ -82,116 +96,127 @@ func GetUser(c *fiber.Ctx) error {
 	}
 
 	// Compare the password
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
-	if err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
 		return c.Status(401).JSON(fiber.Map{"error": "Invalid password"})
 	}
 
-	// Generate JWT token
-	token, err := generateToken(user.ID)
+	// Generate JWT tokens
+	accessToken, err := generateAccessToken(user.ID, c.Context()) // Fixed by adding c.Context()
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate token"})
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate access token"})
+	}
+
+	refreshToken, err := generateRefreshToken(user.ID, c.Context())
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate refresh token"})
 	}
 
 	return c.Status(200).JSON(UserResponse{
-		ID:    user.ID,
-		Email: user.Email,
-		Token: token,
+		ID:           user.ID,
+		Email:        user.Email,
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 }
 
-func DeleteUser(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
-	if userId == 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId is required"})
+func GetRefreshToken(c *fiber.Ctx) error {
+	type RefreshInput struct {
+		RefreshToken string `json:"refreshToken"`
 	}
 
-	// First find the user to make sure they exist and store their email for the response
-	existingUser, err := config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(userId),
-	).Exec(c.Context())
-	if err != nil || existingUser == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "User not found"})
+	var input RefreshInput
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid inputs"})
 	}
-	userEmail := existingUser.Email // Store email before deletion
 
-	// Delete user's links
-	links, err := config.PrismaClient.Links.FindMany(
-		db.Links.UserID.Equals(userId),
-	).Exec(c.Context())
-	if err == nil {
-		for _, link := range links {
-			_, err := config.PrismaClient.Links.FindUnique(
-				db.Links.ID.Equals(link.ID),
-			).Delete().Exec(c.Context())
-			if err != nil {
-				return c.Status(500).JSON(fiber.Map{"error": "Failed to delete user's links"})
-			}
+	// Verify the refresh token
+	token, err := jwt.Parse(input.RefreshToken, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fiber.NewError(fiber.StatusUnauthorized, "Unexpected signing method")
 		}
+		return []byte(os.Getenv("JWT_REFRESH_SECRET")), nil
+	})
+	if err != nil || !token.Valid {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid or expired refresh token"})
 	}
 
-	// Delete user's resume
-	resume, err := config.PrismaClient.Resume.FindUnique(
-		db.Resume.UserID.Equals(userId),
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid refresh token claims"})
+	}
+
+	userID, ok := claims["userId"].(float64)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "User ID not found in refresh token"})
+	}
+
+	// Check if the refresh token exists and not expired
+	refreshTokenDB, err := config.PrismaClient.RefreshToken.FindUnique(
+		db.RefreshToken.Token.Equals(input.RefreshToken),
+	).With(
+		db.RefreshToken.User.Fetch(),
 	).Exec(c.Context())
-	if err == nil && resume != nil {
-		_, err := config.PrismaClient.Resume.FindUnique(
-			db.Resume.UserID.Equals(userId),
-		).Delete().Exec(c.Context())
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Failed to delete user's resume"})
-		}
+	if err != nil || refreshTokenDB == nil || refreshTokenDB.ExpiresAt.Before(time.Now()) {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid or expired refresh token"})
 	}
 
-	// Delete user's projects
-	projects, err := config.PrismaClient.Projects.FindMany(
-		db.Projects.UserID.Equals(userId),
-	).Exec(c.Context())
-	if err == nil {
-		for _, project := range projects {
-			_, err := config.PrismaClient.Projects.FindUnique(
-				db.Projects.ID.Equals(project.ID),
-			).Delete().Exec(c.Context())
-			if err != nil {
-				return c.Status(500).JSON(fiber.Map{"error": "Failed to delete user's projects"})
-			}
-		}
-	}
-
-	// Delete user's experiences
-	experiences, err := config.PrismaClient.Experience.FindMany(
-		db.Experience.UserID.Equals(userId),
-	).Exec(c.Context())
-	if err == nil {
-		for _, exp := range experiences {
-			_, err := config.PrismaClient.Experience.FindUnique(
-				db.Experience.ID.Equals(exp.ID),
-			).Delete().Exec(c.Context())
-			if err != nil {
-				return c.Status(500).JSON(fiber.Map{"error": "Failed to delete user's experiences"})
-			}
-		}
-	}
-
-	// Finally delete the user
-	_, err = config.PrismaClient.User.FindUnique(
-		db.User.ID.Equals(userId),
-	).Delete().Exec(c.Context())
+	// Generate new JWT access token
+	accessToken, err := generateAccessToken(int(userID), c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"error": "Failed to delete user"})
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to generate access token"})
 	}
 
-	return c.Status(200).JSON(fiber.Map{
-		"message": "User and all associated data deleted successfully",
-		"email":   userEmail,
+	return c.JSON(fiber.Map{
+		"accessToken": accessToken,
 	})
 }
 
-func generateToken(userId int) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["userId"] = userId
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix() // Token expires in 72 hours
+func generateAccessToken(userId int, ctx context.Context) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"userId": userId,
+		"exp":    time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 days
+		"iat":    time.Now().Unix(),
+	})
 
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	signedToken, err := token.SignedString([]byte(os.Getenv("JWT_REFRESH_SECRET")))
+	if err != nil {
+		return "", err
+	}
+
+	// Store refresh token in database (assuming this was intended for access token storage)
+	_, err = config.PrismaClient.RefreshToken.CreateOne(
+		db.RefreshToken.Token.Set(signedToken),
+		db.RefreshToken.User.Link(db.User.ID.Equals(userId)),
+		db.RefreshToken.ExpiresAt.Set(time.Now().Add(time.Hour*24*7)),
+	).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return signedToken, nil
+}
+
+func generateRefreshToken(userId int, ctx context.Context) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"userId": userId,
+		"exp":    time.Now().Add(time.Hour * 24 * 30).Unix(), // 30 days
+		"iat":    time.Now().Unix(),
+	})
+
+	signedToken, err := token.SignedString([]byte(os.Getenv("JWT_REFRESH_SECRET")))
+	if err != nil {
+		return "", err
+	}
+
+	// Store refresh token in database
+	_, err = config.PrismaClient.RefreshToken.CreateOne(
+		db.RefreshToken.Token.Set(signedToken),
+		db.RefreshToken.User.Link(db.User.ID.Equals(userId)),
+		db.RefreshToken.ExpiresAt.Set(time.Now().Add(time.Hour*24*30)),
+	).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return signedToken, nil
 }

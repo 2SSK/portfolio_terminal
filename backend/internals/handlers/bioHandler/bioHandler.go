@@ -17,10 +17,8 @@ type BioRequest struct {
 }
 
 func AddBio(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -46,7 +44,7 @@ func AddBio(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	url, publicID, err := fileHandler.UploadFile(image, "bio", userID)
+	url, publicID, _, err := fileHandler.UploadFile(image, "bio", userID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -78,10 +76,8 @@ func AddBio(c *fiber.Ctx) error {
 }
 
 func GetBio(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	bio, err := config.PrismaClient.Bio.FindUnique(
 		db.Bio.UserID.Equals(userID),

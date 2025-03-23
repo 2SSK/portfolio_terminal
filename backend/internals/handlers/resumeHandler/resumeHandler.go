@@ -2,6 +2,8 @@ package resumeHandler
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/2SSK/portfolio_terminal/backend/config"
@@ -16,10 +18,9 @@ type Resume struct {
 }
 
 func GetResume(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
+
 	disposition := c.Query("disposition", "inline")
 
 	resume, err := config.PrismaClient.Resume.FindUnique(
@@ -37,10 +38,8 @@ func GetResume(c *fiber.Ctx) error {
 }
 
 func AddResume(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	file, err := c.FormFile("resume")
 	if err != nil {
@@ -51,10 +50,14 @@ func AddResume(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	url, publicID, err := fileHandler.UploadFile(file, "resume", userID)
+	// Get URL, publicID, and extension from UploadFile
+	url, publicID, ext, err := fileHandler.UploadFile(file, "resume", userID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
+
+	// Append the extension to the URL (or store it separately if preferred)
+	fileURL := url // Cloudinary URL already includes the extension based on the uploaded file
 
 	existingResume, _ := config.PrismaClient.Resume.FindUnique(
 		db.Resume.UserID.Equals(userID),
@@ -62,15 +65,16 @@ func AddResume(c *fiber.Ctx) error {
 
 	var resume *db.ResumeModel
 	if existingResume != nil {
-		fileHandler.DeleteFile(fmt.Sprintf("portfolio/resume/%d_%s", userID, existingResume.File))
+		// Delete the old file using its public ID (assuming stored previously)
+		fileHandler.DeleteFile(fmt.Sprintf("portfolio/resume/%d_%s.%s", userID, strings.TrimSuffix(existingResume.File, filepath.Ext(existingResume.File)), ext))
 		resume, err = config.PrismaClient.Resume.FindUnique(
 			db.Resume.UserID.Equals(userID),
 		).Update(
-			db.Resume.File.Set(url),
+			db.Resume.File.Set(fileURL),
 		).Exec(c.Context())
 	} else {
 		resume, err = config.PrismaClient.Resume.CreateOne(
-			db.Resume.File.Set(url),
+			db.Resume.File.Set(fileURL),
 			db.Resume.User.Link(db.User.ID.Equals(userID)),
 		).Exec(c.Context())
 	}
@@ -87,10 +91,8 @@ func AddResume(c *fiber.Ctx) error {
 }
 
 func DeleteResume(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	resume, err := config.PrismaClient.Resume.FindUnique(
 		db.Resume.UserID.Equals(userID),

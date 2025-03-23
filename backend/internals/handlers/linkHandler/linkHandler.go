@@ -14,10 +14,8 @@ type input struct {
 
 // GetAllLinks gets all links for a specific user
 func GetAllLinks(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
-	if userId == 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	links, err := config.PrismaClient.Links.FindMany(
 		db.Links.UserID.Equals(userId),
@@ -31,7 +29,8 @@ func GetAllLinks(c *fiber.Ctx) error {
 
 // GetLink gets a specific link and verifies it belongs to the user
 func GetLink(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	linkId, err := c.ParamsInt("id")
 	if err != nil {
@@ -131,7 +130,8 @@ func UpdateLink(c *fiber.Ctx) error {
 
 // DeleteLink deletes a specific link if it belongs to the user
 func DeleteLink(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	linkId, err := c.ParamsInt("id")
 	if err != nil {

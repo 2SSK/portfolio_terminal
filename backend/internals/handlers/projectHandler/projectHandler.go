@@ -20,10 +20,8 @@ type ProjectRequest struct {
 }
 
 func AddProject(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -56,7 +54,7 @@ func AddProject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	url, publicID, err := fileHandler.UploadFile(file, "project", userID)
+	url, publicID, _, err := fileHandler.UploadFile(file, "project", userID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -83,10 +81,8 @@ func AddProject(c *fiber.Ctx) error {
 }
 
 func GetAllProjects(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	projects, err := config.PrismaClient.Projects.FindMany(
 		db.Projects.UserID.Equals(userID),
@@ -102,10 +98,8 @@ func GetAllProjects(c *fiber.Ctx) error {
 }
 
 func GetProject(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	projectID, err := c.ParamsInt("id")
 	if err != nil {
@@ -124,10 +118,8 @@ func GetProject(c *fiber.Ctx) error {
 }
 
 func UpdateProject(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	projectID, err := c.ParamsInt("id")
 	if err != nil {
@@ -169,7 +161,7 @@ func UpdateProject(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
 
-		url, publicID, err := fileHandler.UploadFile(file, "project", userID)
+		url, publicID, _, err := fileHandler.UploadFile(file, "project", userID)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -205,10 +197,8 @@ func UpdateProject(c *fiber.Ctx) error {
 }
 
 func DeleteProject(c *fiber.Ctx) error {
-	userID := c.QueryInt("userId")
-	if userID == 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "userId is required"})
-	}
+	user := c.Locals("user").(*db.UserModel)
+	userID := user.ID
 
 	projectID, err := c.ParamsInt("id")
 	if err != nil {

@@ -18,7 +18,8 @@ type ExperienceRequest struct {
 }
 
 func AddExperience(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	experience := new(ExperienceRequest)
 	if err := c.BodyParser(experience); err != nil {
@@ -51,7 +52,8 @@ func AddExperience(c *fiber.Ctx) error {
 }
 
 func GetAllExperience(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	experiences, err := config.PrismaClient.Experience.FindMany(
 		db.Experience.UserID.Equals(userId),
@@ -64,7 +66,8 @@ func GetAllExperience(c *fiber.Ctx) error {
 }
 
 func GetExperience(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	experienceId, err := c.ParamsInt("id")
 	if err != nil {
@@ -90,7 +93,9 @@ func GetExperience(c *fiber.Ctx) error {
 }
 
 func UpdateExperience(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
+
 	experienceId, err := c.ParamsInt("id")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid experience ID"})
@@ -133,7 +138,8 @@ func UpdateExperience(c *fiber.Ctx) error {
 }
 
 func DeleteExperience(c *fiber.Ctx) error {
-	userId := c.QueryInt("userId")
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
 
 	experienceId, err := c.ParamsInt("id")
 	if err != nil {

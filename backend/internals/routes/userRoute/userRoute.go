@@ -8,7 +8,7 @@ import (
 func SetupUserRoute(router fiber.Router) {
 	user := router.Group("/user")
 
-	user.Post("/", userHandler.CreateUser)
-	user.Get("/", userHandler.GetUser)
-	user.Delete("/", userHandler.DeleteUser)
+	user.Post("/register", userHandler.CreateUser)
+	user.Post("/login", userHandler.GetUser)
+	user.Post("/refresh", userHandler.GetRefreshToken)
 }

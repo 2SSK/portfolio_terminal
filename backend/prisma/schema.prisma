@@ -8,15 +8,25 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
-  password    String
-  projects    Projects[]
-  experiences Experience[]
-  tools       Tools[]
-  links       Links[]
-  resume      Resume?
-  bio         Bio?
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  password     String
+  projects     Projects[]
+  experiences  Experience[]
+  tools        Tools[]
+  links        Links[]
+  resume       Resume?
+  bio          Bio?
+  RefreshToken RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model Bio {

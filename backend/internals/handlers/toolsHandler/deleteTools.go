@@ -9,11 +9,13 @@ import (
 )
 
 type DeleteRequest struct {
-	Name   string `json:"name"`
-	UserId int    `json:"userId"`
+	Name string `json:"name"`
 }
 
 func DeleteProgrammingLang(c *fiber.Ctx) error {
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
+
 	var req DeleteRequest
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -25,9 +27,6 @@ func DeleteProgrammingLang(c *fiber.Ctx) error {
 	req.Name = strings.TrimSpace(req.Name)
 	if req.Name == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Name parameter is required"})
-	}
-	if req.UserId <= 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId parameter is required"})
 	}
 
 	// Convert the name to lowercase
@@ -52,7 +51,7 @@ func DeleteProgrammingLang(c *fiber.Ctx) error {
 	}
 
 	// Check if the user is authorized to delete the language
-	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != req.UserId {
+	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != userId {
 		return c.Status(403).JSON(fiber.Map{"error": "You are not authorized to delete this language"})
 	}
 
@@ -74,6 +73,9 @@ func DeleteProgrammingLang(c *fiber.Ctx) error {
 }
 
 func DeleteSoftwareTool(c *fiber.Ctx) error {
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
+
 	var req DeleteRequest
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -85,9 +87,6 @@ func DeleteSoftwareTool(c *fiber.Ctx) error {
 	req.Name = strings.TrimSpace(req.Name)
 	if req.Name == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Name parameter is required"})
-	}
-	if req.UserId <= 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId parameter is required"})
 	}
 
 	// Convert the name to lowercase
@@ -112,7 +111,7 @@ func DeleteSoftwareTool(c *fiber.Ctx) error {
 	}
 
 	// Check if the user is authorized to delete the language
-	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != req.UserId {
+	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != userId {
 		return c.Status(403).JSON(fiber.Map{"error": "You are not authorized to delete this software tool"})
 	}
 
@@ -134,6 +133,9 @@ func DeleteSoftwareTool(c *fiber.Ctx) error {
 }
 
 func DeleteFramework(c *fiber.Ctx) error {
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
+
 	var req DeleteRequest
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -145,9 +147,6 @@ func DeleteFramework(c *fiber.Ctx) error {
 	req.Name = strings.TrimSpace(req.Name)
 	if req.Name == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Name parameter is required"})
-	}
-	if req.UserId <= 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId parameter is required"})
 	}
 
 	// Convert the name to lowercase
@@ -172,7 +171,7 @@ func DeleteFramework(c *fiber.Ctx) error {
 	}
 
 	// Check if the user is authorized to delete the language
-	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != req.UserId {
+	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != userId {
 		return c.Status(403).JSON(fiber.Map{"error": "You are not authorized to delete this framework"})
 	}
 
@@ -194,6 +193,9 @@ func DeleteFramework(c *fiber.Ctx) error {
 }
 
 func DeleteDatabase(c *fiber.Ctx) error {
+	user := c.Locals("user").(*db.UserModel)
+	userId := user.ID
+
 	var req DeleteRequest
 	if err := c.BodyParser(&req); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -205,9 +207,6 @@ func DeleteDatabase(c *fiber.Ctx) error {
 	req.Name = strings.TrimSpace(req.Name)
 	if req.Name == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Name parameter is required"})
-	}
-	if req.UserId <= 0 {
-		return c.Status(400).JSON(fiber.Map{"error": "UserId parameter is required"})
 	}
 
 	// Convert the name to lowercase
@@ -232,7 +231,7 @@ func DeleteDatabase(c *fiber.Ctx) error {
 	}
 
 	// Check if the user is authorized to delete the language
-	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != req.UserId {
+	if len(lang.Tools()) > 0 && lang.Tools()[0].UserID != userId {
 		return c.Status(403).JSON(fiber.Map{"error": "You are not authorized to delete this database"})
 	}
 

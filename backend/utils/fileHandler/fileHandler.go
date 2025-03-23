@@ -75,15 +75,18 @@ func ValidateFile(file *multipart.FileHeader, category string) error {
 }
 
 // UploadFile uploads a file to Cloudinary and returns the secure URL and public ID
-func UploadFile(file *multipart.FileHeader, category string, userID int) (string, string, error) {
+func UploadFile(file *multipart.FileHeader, category string, userID int) (string, string, string, error) {
 	f, err := file.Open()
 	if err != nil {
-		return "", "", fmt.Errorf("failed to open file: %v", err)
+		return "", "", "", fmt.Errorf("failed to open file: %v", err)
 	}
 	defer f.Close()
 
-	// Create a unique public ID
-	publicID := fmt.Sprintf("%d_%s", userID, strings.TrimSuffix(file.Filename, filepath.Ext(file.Filename)))
+	// Get the file extension
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+
+	// Create a unique public ID without the extension (Cloudinary will append it)
+	publicID := fmt.Sprintf("%d_%s", userID, strings.TrimSuffix(file.Filename, ext))
 
 	ctx := context.Background()
 	resp, err := cld.Upload.Upload(ctx, f, uploader.UploadParams{
@@ -91,10 +94,10 @@ func UploadFile(file *multipart.FileHeader, category string, userID int) (string
 		Folder:   fmt.Sprintf("portfolio/%s", category),
 	})
 	if err != nil {
-		return "", "", fmt.Errorf("failed to upload to Cloudinary: %v", err)
+		return "", "", "", fmt.Errorf("failed to upload to Cloudinary: %v", err)
 	}
 
-	return resp.SecureURL, publicID, nil
+	return resp.SecureURL, publicID, ext, nil
 }
 
 // DeleteFile deletes a file from Cloudinary by public ID

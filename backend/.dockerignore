@@ -1,0 +1,6 @@
+/vendor
+/node_modules
+/tmp
+/.git
+/.idea
+*.md
