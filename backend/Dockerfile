@@ -1,30 +1,44 @@
-# Use a small Go image
+# Stage 1: Build the application
 FROM golang:1.24-alpine AS builder
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the Go module files
+# Copy go.mod and go.sum
 COPY go.mod go.sum ./
+
+# Download dependencies
 RUN go mod download
 
-# Copy the application source code
+# Copy the entire project (excluding prisma/db/ via .dockerignore)
 COPY . .
 
-# Build the application
-RUN go build -o server .
+# Ensure prisma directory exists and copy schema
+COPY prisma/schema.prisma ./prisma/
 
-# Use a minimal base image for deployment
+# Generate Prisma client for Linux
+RUN GOOS=linux go run github.com/steebchen/prisma-client-go generate
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./main.go
+
+# Stage 2: Create a lightweight runtime image
 FROM alpine:latest
 
-# Set the working directory
+# Install ca-certificates for HTTPS requests
+RUN apk --no-cache add ca-certificates
+
+# Set working directory
 WORKDIR /root/
 
-# Copy the compiled binary from the builder stage
-COPY --from=builder /app/server .
+# Copy the binary from the builder stage
+COPY --from=builder /app/main .
 
-# Expose the application port
+# Copy Prisma schema (needed for runtime migrations, if applicable)
+COPY --from=builder /app/prisma ./prisma/
+
+# Expose the port
 EXPOSE 3000
 
-# Run the application
-CMD ["./server"]
+# Command to run the application
+CMD ["./main"]

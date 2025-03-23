@@ -1,6 +1,8 @@
-/vendor
-/node_modules
-/tmp
-/.git
-/.idea
+.git
+.gitignore
+.env
+tmp/
+*.log
+Dockerfile
 *.md
+prisma/db/*

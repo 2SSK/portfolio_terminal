@@ -6,6 +6,10 @@
 *.dylib
 *.test
 *.out
+bin/
+dist/
+
+# Go workspace
 go.work
 
 # Environment variables
@@ -13,8 +17,30 @@ go.work
 .env.*
 !.env.example
 
-# Prisma
-generated/
+# Prisma generated files
+prisma/db/
+prisma/generated/
+
+# Dependency directories
+vendor/
+
+# Build and temporary files
+tmp/
+temp/
+main  # The compiled binary from go build
+
+# Log files
+*.log
+logs/
+build-errors.log
+
+# Database files (if any local DBs are used)
+*.db
+*.sqlite
+
+# Docker-related
+Dockerfile.*
+*.dockerignore
 
 # IDE specific
 .idea/
@@ -23,36 +49,13 @@ generated/
 *.swo
 .DS_Store
 
-# Dependency directories
-vendor/
-
-# Debug files
-debug/
-
-# Binary files
-bin/
-dist/
-
-# Log files
-*.log
-logs/
-
-# Temporary files
-tmp/
-temp/
-
-# Database files
-*.db
-*.sqlite
-
 # Coverage reports
 coverage.txt
 coverage.html
 
-# Air live reload
-tmp/
+# Air live reload (if you use air for hot reloading)
 .air.toml
 
 # Local development specific files
 notes.txt
-TODO.md
+debug/

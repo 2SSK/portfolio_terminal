@@ -12,10 +12,17 @@ import (
 )
 
 func main() {
-	//	 Load the environment variables
+	// Load the environment variables from .env file if it exists (optional)
 	if err := godotenv.Load(); err != nil {
-		log.Println("Error loading .env file")
+		log.Println("No .env file found, relying on system environment variables")
 	}
+
+	// Check if DATABASE_URL is set
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		log.Fatal("DATABASE_URL environment variable is not set")
+	}
+	log.Printf("Using DATABASE_URL: %s", dbURL)
 
 	// Initialize database connection
 	config.InitDB()
