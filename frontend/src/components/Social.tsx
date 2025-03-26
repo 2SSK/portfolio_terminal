@@ -14,7 +14,7 @@ const twitter = "https://x.com/_2ssk";
 
 const Social = () => {
   return (
-    <div className="mt-4 md:ml-8 flex flex-col ">
+    <div className="mt-4 pb-8 md:pb-0 md:ml-8 flex flex-col">
       <span className="md:hidden font-bold text-xl text-[#bb9af7] mt-4">
         Contact:
       </span>
