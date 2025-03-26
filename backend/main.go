@@ -17,13 +17,6 @@ func main() {
 		log.Println("No .env file found, relying on system environment variables")
 	}
 
-	// Check if DATABASE_URL is set
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
-	}
-	log.Printf("Using DATABASE_URL: %s", dbURL)
-
 	// Initialize database connection
 	config.InitDB()
 	defer config.CloseDB()

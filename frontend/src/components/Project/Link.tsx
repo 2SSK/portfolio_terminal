@@ -17,7 +17,7 @@ const Link = ({ href, github, title, description, image }: LinkProps) => {
         <img
           src={image}
           alt={title}
-          className="rounded-md md:h-[130px] h-[180px] w-full md:w-[200px] md:hover:scale-150 md:duration-300 md:transition-all md:ease-in-out object-cover"
+          className="rounded-md w-full h-[180px] md:max-w-[200px] md:min-w-[200px] md:h-[130px] md:hover:scale-150 md:duration-300 md:transition-all md:ease-in-out object-cover"
         />
       )}
       <div className="flex flex-col justify-start">

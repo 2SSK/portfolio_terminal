@@ -5,7 +5,7 @@ import { focusInputState } from "../../store/atom/atom";
 const TerminalInput = lazy(() => import("./TerminalInput"));
 const TerminalOutput = lazy(() => import("./TerminalOutput"));
 
-export default function TerminalBox() {
+export default function TerminalBox({ className }: { className?: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const setFocusInput = useSetRecoilState(focusInputState);
   const outputRef = useRef<HTMLDivElement>(null); // Ref for auto-scrolling
@@ -23,7 +23,7 @@ export default function TerminalBox() {
   return (
     <div
       onClick={handleFocusInput}
-      className="w-full h-[85%] sm:h-full mb-5 p-4 border-4 border-customBlue rounded-lg bg-[#011423] bg-opacity-50 backdrop-blur-xl shadow-lg shadow-secondary overflow-y-auto overflow-x-hidden"
+      className={`w-full h-[85%] sm:h-full mb-5 p-4 border-4 border-customBlue rounded-lg bg-[#011423] bg-opacity-50 backdrop-blur-xl shadow-lg shadow-secondary overflow-y-auto overflow-x-hidden ${className}`}
       ref={outputRef}
     >
       <style>{`

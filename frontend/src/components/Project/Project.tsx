@@ -9,6 +9,9 @@ import containerPreview from "/images/projects/container_preview.png";
 export default function Project() {
   return (
     <div className="mt-4 md:ml-10 flex flex-col gap-4">
+      <span className="md:hidden text-2xl font-bold text-[#bb9af7] mt-4">
+        Projects:
+      </span>
       <Link
         image={coflowPreview}
         github="https://github.com/2SSK/CoFlow.git"
