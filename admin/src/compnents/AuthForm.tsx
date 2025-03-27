@@ -2,32 +2,49 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "@/actions/auth";
+import { login, signup } from "@/actions/auth";
 
-export default function LoginForm() {
+type AuthType = "login" | "signup";
+
+interface AuthFormProps {
+  authType: AuthType;
+  redirectPath?: string; // Optional, defaults to "/"
+}
+
+export default function AuthForm({
+  authType,
+  redirectPath = "/",
+}: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
+  const authAction = authType === "login" ? login : signup;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
-      router.push("/admin"); // Redirect to admin page on success
+      await authAction(email, password);
+      router.push(redirectPath);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      setError(
+        err instanceof Error
+          ? err.message
+          : `${authType.charAt(0).toUpperCase() + authType.slice(1)} failed`,
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <input
+        type="text"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         name="email"
-        className="input"
+        className="w-full p-2 border rounded"
       />
       <input
         type="password"
@@ -35,14 +52,14 @@ export default function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         name="password"
-        className="input"
+        className="w-full p-2 border rounded"
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <button
         type="submit"
-        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className="w-full font-semibold bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
       >
-        Login
+        {authType === "login" ? "Login" : "Sign Up"}
       </button>
     </form>
   );

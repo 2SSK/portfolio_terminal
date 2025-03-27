@@ -8,7 +8,7 @@ interface AuthResponse {
   id: number;
   email: string;
   accessToken: string;
-  refreshToken?: string; // Made optional since refresh endpoint might not return it
+  refreshToken?: string;
 }
 
 // Configuration for your API
@@ -39,19 +39,16 @@ async function verifyToken(token: string): Promise<AuthResponse | null> {
 
 // Server action to check authentication status
 export async function checkAuth() {
-  const cookieStore = await cookies(); // Await the cookies() promise
+  const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 
-  // If no token exists, redirect to login
   if (!accessToken) {
     redirect("/login");
   }
 
-  // Verify the token with the backend
   const user = await verifyToken(accessToken);
 
   if (!user) {
-    // If token is invalid or expired, try to refresh it
     const refreshToken = cookieStore.get("refreshToken")?.value;
 
     if (refreshToken) {
@@ -65,58 +62,85 @@ export async function checkAuth() {
 
       if (refreshResponse.ok) {
         const newTokens = await refreshResponse.json();
-        // Update cookies with new tokens
         cookieStore.set("accessToken", newTokens.accessToken, {
           path: "/",
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          maxAge: 7 * 24 * 60 * 60, // 7 days
+          maxAge: 7 * 24 * 60 * 60,
         });
         return newTokens as AuthResponse;
       }
     }
 
-    // If refresh fails or no refresh token, redirect to login
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
     redirect("/login");
   }
 
-  // If we get here, user is authenticated
   return user;
 }
 
-// Add this to your auth.ts file
+// Login function
 export async function login(email: string, password: string) {
-  // Talk to the backend to get the keys
-  const response = await fetch(`${API_URL}/api/user`, {
-    method: "POST", // We’re sending info, so POST
+  const response = await fetch(`${API_URL}/api/user/login`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }), // Send email and password
+    body: JSON.stringify({ email, password }),
   });
 
-  // If the computer says no (wrong email or password)
   if (!response.ok) {
     throw new Error("Oops! Wrong email or password!");
   }
 
-  // Get the keys from the computer
   const data = (await response.json()) as AuthResponse;
-
-  // Open your backpack
   const cookieStore = await cookies();
 
-  // Put the accessToken in your backpack (it’s always there!)
   cookieStore.set("accessToken", data.accessToken, {
     path: "/",
-    httpOnly: true, // Keeps it safe
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 7 * 24 * 60 * 60,
+  });
+
+  if (data.refreshToken) {
+    cookieStore.set("refreshToken", data.refreshToken, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60,
+    });
+  }
+
+  return data;
+}
+
+// Signup function
+export async function signup(email: string, password: string) {
+  const response = await fetch(`${API_URL}/api/user/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Failed to create account");
+  }
+
+  const data = (await response.json()) as AuthResponse;
+  const cookieStore = await cookies();
+
+  cookieStore.set("accessToken", data.accessToken, {
+    path: "/",
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60, // 7 days
   });
 
-  // Only put refreshToken in if it’s really there
   if (data.refreshToken) {
     cookieStore.set("refreshToken", data.refreshToken, {
       path: "/",
@@ -126,13 +150,12 @@ export async function login(email: string, password: string) {
     });
   }
 
-  // Yay! You’re logged in!
-  return data; // Give back the user info
+  return data;
 }
 
-// Helper function to handle logout
+// Logout function
 export async function logout() {
-  const cookieStore = await cookies(); // Await the cookies() promise
+  const cookieStore = await cookies();
   cookieStore.delete("accessToken");
   cookieStore.delete("refreshToken");
   redirect("/login");
