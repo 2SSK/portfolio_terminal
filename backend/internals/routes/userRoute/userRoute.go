@@ -11,4 +11,5 @@ func SetupUserRoute(router fiber.Router) {
 	user.Post("/register", userHandler.CreateUser)
 	user.Post("/login", userHandler.GetUser)
 	user.Post("/refresh", userHandler.GetRefreshToken)
+	user.Get("/verify", userHandler.VerifyToken)
 }

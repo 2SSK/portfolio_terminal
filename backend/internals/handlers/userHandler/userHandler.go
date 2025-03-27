@@ -3,6 +3,7 @@ package userHandler
 import (
 	"context"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/2SSK/portfolio_terminal/backend/config"
@@ -219,4 +220,47 @@ func generateRefreshToken(userId int, ctx context.Context) (string, error) {
 	}
 
 	return signedToken, nil
+}
+
+func VerifyToken(c *fiber.Ctx) error {
+	tokenString := c.Get("Authorization")
+	if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
+		return c.Status(401).JSON(fiber.Map{"error": "No token provided"})
+	}
+
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fiber.NewError(fiber.StatusUnauthorized, "Unexpected signing method")
+		}
+		return []byte(os.Getenv("JWT_REFRESH_SECRET")), nil
+	})
+
+	if err != nil || !token.Valid {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid token"})
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "Invalid token claims"})
+	}
+
+	userID, ok := claims["userId"].(float64)
+	if !ok {
+		return c.Status(401).JSON(fiber.Map{"error": "User ID not found"})
+	}
+
+	user, err := config.PrismaClient.User.FindUnique(
+		db.User.ID.Equals(int(userID)),
+	).Exec(c.Context())
+	if err != nil {
+		return c.Status(401).JSON(fiber.Map{"error": "User not found"})
+	}
+
+	return c.JSON(UserResponse{
+		ID:          user.ID,
+		Email:       user.Email,
+		AccessToken: tokenString,
+	})
 }
