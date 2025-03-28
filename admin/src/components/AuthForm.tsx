@@ -49,7 +49,7 @@ export default function AuthForm({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         name="email"
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border outline-none rounded focus:border-blue-500"
         disabled={isLoading}
       />
       <input
@@ -58,7 +58,7 @@ export default function AuthForm({
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         name="password"
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border outline-none rounded focus:border-blue-500"
         disabled={isLoading}
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}

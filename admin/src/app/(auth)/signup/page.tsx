@@ -1,5 +1,11 @@
-import AuthForm from "@/compnents/AuthForm";
-import { LinkTxt } from "@/compnents/Link";
+import AuthForm from "@/components/AuthForm";
+import { LinkTxt } from "@/components/Link";
+
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SignUp",
+};
 
 export default function SignupPage() {
   return (
